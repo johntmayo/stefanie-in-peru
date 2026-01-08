@@ -1,0 +1,1152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Peru Passport — bite-sized learning</title>
+  <style>
+    :root{
+      --bg:#0f1412;
+      --panel:#151c18;
+      --panel2:#101612;
+      --text:#e7efe9;
+      --muted:#b8c6be;
+      --faint:#7f8f86;
+      --accent:#7bd6a4;
+      --accent2:#ffb86b;
+      --danger:#ff6b6b;
+      --stroke:rgba(255,255,255,.10);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --tap: 52px;
+      --max: 980px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(900px 600px at 10% -10%, rgba(123,214,164,.18), transparent 60%),
+        radial-gradient(900px 600px at 110% 10%, rgba(255,184,107,.15), transparent 55%),
+        radial-gradient(900px 600px at 50% 120%, rgba(123,214,164,.10), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a{ color:inherit; }
+    button, input { font: inherit; }
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 18px 14px 28px;
+    }
+
+    header{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin: 4px 0 14px;
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .logo{
+      width:44px; height:44px;
+      border-radius: 14px;
+      background:
+        linear-gradient(145deg, rgba(123,214,164,.25), rgba(255,184,107,.18)),
+        rgba(255,255,255,.06);
+      border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+    }
+    .logo span{ font-size:22px; filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); }
+    .title h1{
+      font-size: 18px;
+      margin:0;
+      letter-spacing: .2px;
+      line-height: 1.15;
+    }
+    .title p{
+      margin:4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      max-width: 42ch;
+    }
+
+    .topActions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+
+    .pill{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      color: var(--muted);
+      font-size: 13px;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .pill strong{ color: var(--text); font-weight:700; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 860px){
+      .grid{ grid-template-columns: 1.2fr .8fr; align-items:start; }
+    }
+
+    .panel{
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .panelHead{
+      padding: 12px 12px 10px;
+      border-bottom: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .tabBtn{
+      min-height: 40px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.15);
+      color: var(--muted);
+      cursor:pointer;
+      transition: transform .08s ease, background .15s ease, color .15s ease;
+      user-select:none;
+    }
+    .tabBtn:active{ transform: scale(.98); }
+    .tabBtn[aria-selected="true"]{
+      background: rgba(123,214,164,.16);
+      border-color: rgba(123,214,164,.35);
+      color: var(--text);
+    }
+
+    .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      min-height: 40px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor:pointer;
+      transition: transform .08s ease, background .15s ease;
+      user-select:none;
+    }
+    .btn:active{ transform: scale(.98); }
+    .btn.primary{
+      background: rgba(123,214,164,.18);
+      border-color: rgba(123,214,164,.35);
+    }
+    .btn.ghost{
+      background: rgba(0,0,0,.10);
+      color: var(--muted);
+    }
+
+    .progressRow{
+      padding: 10px 12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .bar{
+      height:10px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      overflow:hidden;
+      flex:1;
+      min-width: 160px;
+    }
+    .bar > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(123,214,164,.9), rgba(255,184,107,.85));
+      border-radius: 999px;
+      transition: width .25s ease;
+    }
+    .progressMeta{
+      color: var(--muted);
+      font-size: 13px;
+      white-space:nowrap;
+    }
+
+    /* Flashcard */
+    .cardZone{
+      padding: 12px;
+    }
+    .flashcard{
+      position:relative;
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.06));
+      overflow:hidden;
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+    }
+
+    .cardTop{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 12px 8px;
+    }
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .badge .dot{
+      width:10px; height:10px;
+      border-radius:999px;
+      background: rgba(123,214,164,.9);
+      box-shadow: 0 0 0 6px rgba(123,214,164,.12);
+    }
+
+    .star{
+      width: 42px;
+      height: 42px;
+      display:grid;
+      place-items:center;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      cursor:pointer;
+      user-select:none;
+    }
+    .star[aria-pressed="true"]{
+      background: rgba(255,184,107,.16);
+      border-color: rgba(255,184,107,.35);
+    }
+    .star span{ font-size: 18px; }
+
+    .face{
+      padding: 6px 14px 14px;
+    }
+    .prompt{
+      font-size: 18px;
+      margin: 8px 0 8px;
+      line-height: 1.25;
+      letter-spacing:.1px;
+    }
+    .hint{
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .reveal{
+      margin-top: 10px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(255,255,255,.22);
+      background: rgba(0,0,0,.12);
+    }
+    .reveal.hidden{
+      display:none;
+    }
+    .fact{
+      margin:0;
+      font-size: 15px;
+      line-height: 1.42;
+      color: var(--text);
+    }
+    .why{
+      margin: 8px 0 0;
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .tapRow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px;
+      border-top: 1px solid var(--stroke);
+      background: rgba(0,0,0,.10);
+      flex-wrap:wrap;
+    }
+    .kbd{
+      color: var(--faint);
+      font-size: 12px;
+    }
+
+    /* Sidebar */
+    .sideBody{ padding: 12px; display:grid; gap:12px; }
+
+    .mini{
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+    }
+    .mini h3{
+      margin:0 0 6px;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    .mini p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .imgGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .ph{
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background:
+        radial-gradient(70% 70% at 30% 25%, rgba(123,214,164,.22), transparent 60%),
+        radial-gradient(70% 70% at 70% 75%, rgba(255,184,107,.18), transparent 60%),
+        rgba(255,255,255,.04);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      position:relative;
+    }
+    .ph img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .ph .label{
+      position:absolute;
+      inset:auto 8px 8px 8px;
+      padding: 6px 8px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.40);
+      border:1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.92);
+      font-size: 11px;
+      line-height:1.2;
+      backdrop-filter: blur(6px);
+    }
+    .ph .emoji{ font-size: 22px; opacity:.9; }
+
+    /* Quiz modal */
+    .modalOverlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding: 14px;
+      z-index:50;
+    }
+    .modalOverlay.show{ display:flex; }
+
+    .modal{
+      width:min(720px, 100%);
+      border-radius: 22px;
+      border: 1px solid var(--stroke);
+      background:
+        radial-gradient(900px 500px at 30% 0%, rgba(123,214,164,.18), transparent 55%),
+        rgba(15,20,18,.96);
+      box-shadow: 0 30px 80px rgba(0,0,0,.6);
+      overflow:hidden;
+    }
+
+    .modalHead{
+      padding: 12px 12px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom: 1px solid var(--stroke);
+    }
+    .modalHead h2{
+      margin:0;
+      font-size: 15px;
+      letter-spacing:.2px;
+    }
+    .modalBody{ padding: 12px; }
+    .q{
+      margin: 4px 0 10px;
+      font-size: 16px;
+      line-height:1.3;
+    }
+    .choices{
+      display:grid;
+      gap:10px;
+    }
+    .choice{
+      text-align:left;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      cursor:pointer;
+    }
+    .choice:active{ transform: scale(.99); }
+    .choice.correct{
+      border-color: rgba(123,214,164,.55);
+      background: rgba(123,214,164,.14);
+    }
+    .choice.wrong{
+      border-color: rgba(255,107,107,.55);
+      background: rgba(255,107,107,.10);
+    }
+    .modalFoot{
+      padding: 12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      border-top: 1px solid var(--stroke);
+      flex-wrap:wrap;
+    }
+    .small{
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Tiny toast */
+    .toast{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom: 14px;
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 999px;
+      display:none;
+      z-index:60;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.45);
+      font-size: 13px;
+      max-width: calc(100% - 28px);
+      text-align:center;
+    }
+    .toast.show{ display:block; }
+
+    .srOnly{
+      position:absolute !important;
+      width:1px; height:1px;
+      padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0);
+      white-space:nowrap; border:0;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><span>🇵🇪</span></div>
+        <div class="title">
+          <h1>Peru Passport</h1>
+          <p>Tap-to-reveal flashcards. Star favorites. Take a quick quiz. Collect stamps across six “mini-worlds.”</p>
+        </div>
+      </div>
+      <div class="topActions">
+        <div class="pill" title="Your saved favorites">
+          ⭐ <strong id="favCount">0</strong> <span>favorites</span>
+        </div>
+        <div class="pill" title="Your stamps earned (complete a stop)">
+          🛂 <strong id="stampCount">0</strong> <span>stamps</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Main panel -->
+      <section class="panel" aria-label="Flashcards">
+        <div class="panelHead">
+          <div class="tabs" role="tablist" aria-label="Stops">
+            <!-- tabs injected -->
+          </div>
+          <div class="controls">
+            <button class="btn ghost" id="btnShuffle" title="Shuffle this stop">🔀 Shuffle</button>
+            <button class="btn ghost" id="btnRandom" title="Jump to a random card">🎲 Random</button>
+            <button class="btn primary" id="btnQuiz" title="Quick quiz from this stop">🧠 Quiz</button>
+          </div>
+        </div>
+
+        <div class="progressRow">
+          <div class="bar" aria-label="Progress"><div id="barFill"></div></div>
+          <div class="progressMeta"><span id="posLabel">1</span>/<span id="totalLabel">1</span> • <span id="seenLabel">0</span> seen</div>
+        </div>
+
+        <div class="cardZone">
+          <article class="flashcard" id="flashcard" aria-live="polite">
+            <div class="cardTop">
+              <div class="badge"><span class="dot" id="catDot"></span><span id="catLabel">Stop</span></div>
+              <button class="star" id="btnStar" aria-pressed="false" title="Star this card">
+                <span aria-hidden="true">☆</span>
+                <span class="srOnly">Star</span>
+              </button>
+            </div>
+
+            <div class="face" id="cardTapArea" role="button" tabindex="0" aria-label="Tap to reveal or hide">
+              <p class="prompt" id="prompt">…</p>
+              <p class="hint" id="hint">Tap to reveal.</p>
+
+              <div class="reveal hidden" id="reveal">
+                <p class="fact" id="fact">…</p>
+                <p class="why" id="why">…</p>
+              </div>
+            </div>
+
+            <div class="tapRow">
+              <button class="btn" id="btnPrev">← Prev</button>
+              <div class="kbd">Tip: tap the card to reveal • double-tap = mark “seen”</div>
+              <button class="btn" id="btnNext">Next →</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Sidebar -->
+      <aside class="panel" aria-label="Extras">
+        <div class="panelHead">
+          <div class="badge"><span class="dot" style="background:rgba(255,184,107,.9); box-shadow:0 0 0 6px rgba(255,184,107,.12)"></span> Extras</div>
+          <button class="btn ghost" id="btnReset" title="Reset progress (local only)">♻️ Reset</button>
+        </div>
+
+        <div class="sideBody">
+          <div class="mini">
+            <h3>How this works</h3>
+            <p>
+              Pick a stop → tap to reveal. Double-tap the card to mark it “seen.”
+              When you’ve seen every card in a stop, you earn a stamp.
+            </p>
+          </div>
+
+          <div class="mini">
+            <h3>Images (max 6)</h3>
+            <p style="margin-bottom:10px;">
+              Drop your own images into the <code>images/</code> folder and update the <code>src</code> paths below.
+              I kept it to six.
+            </p>
+            <div class="imgGrid">
+              <div class="ph">
+                <!-- Replace src with your file -->
+                <img src="images/machu-picchu.jpg" alt="Machu Picchu (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">🏛️</div>
+                <div class="label">Machu Picchu</div>
+              </div>
+              <div class="ph">
+                <img src="images/andes.jpg" alt="Andes mountains (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">⛰️</div>
+                <div class="label">The Andes</div>
+              </div>
+              <div class="ph">
+                <img src="images/amazon.jpg" alt="Amazon rainforest in Peru (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">🌿</div>
+                <div class="label">Amazonia</div>
+              </div>
+              <div class="ph">
+                <img src="images/ceviche.jpg" alt="Ceviche (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">🍋</div>
+                <div class="label">Ceviche</div>
+              </div>
+              <div class="ph">
+                <img src="images/nazca.jpg" alt="Nazca lines (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">🌀</div>
+                <div class="label">Nazca Lines</div>
+              </div>
+              <div class="ph">
+                <img src="images/alpaca.jpg" alt="Alpaca or llama (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">🦙</div>
+                <div class="label">Alpaca / Llama</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini">
+            <h3>Favorites</h3>
+            <p id="favList">Star cards to save them here.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Quiz modal -->
+  <div class="modalOverlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Quick quiz">
+    <div class="modal">
+      <div class="modalHead">
+        <h2>Quick Quiz</h2>
+        <button class="btn ghost" id="btnCloseQuiz">✕ Close</button>
+      </div>
+      <div class="modalBody">
+        <div class="small" id="quizMeta">…</div>
+        <p class="q" id="quizQ">…</p>
+        <div class="choices" id="quizChoices"></div>
+      </div>
+      <div class="modalFoot">
+        <div class="small">Score: <strong id="quizScore">0</strong>/<span id="quizTotal">0</span></div>
+        <button class="btn primary" id="btnNextQ">Next question →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" aria-live="polite">Saved.</div>
+
+  <script>
+    // -----------------------------
+    // Data: bite-sized flashcards
+    // -----------------------------
+    const STOPS = [
+      { id:"coast",  name:"Coast (Costa)",   emoji:"🌊" },
+      { id:"andes",  name:"Andes (Sierra)",  emoji:"⛰️" },
+      { id:"amazon", name:"Amazonia",        emoji:"🌿" },
+      { id:"history",name:"History",         emoji:"🏺" },
+      { id:"people", name:"People + Language", emoji:"🗣️" },
+      { id:"food",   name:"Food + Culture",  emoji:"🍽️" }
+    ];
+
+    // Each card: prompt + fact + why (tiny meaning)
+    const CARDS = [
+      // Coast
+      { stop:"coast", prompt:"Peru touches which ocean?", fact:"The Pacific Ocean runs along Peru’s western edge.", why:"That coastline shapes food (seafood!), climate, and big cities like Lima." },
+      { stop:"coast", prompt:"What’s a classic way Peru is “split” geographically?", fact:"Peru is often described as three long regions: the arid Coast (Costa), the Andes (Sierra), and the Amazon Basin (Amazonia) to the east.", why:"It’s one reason Peru feels like multiple countries in one.", tag:"3-regions" },
+      { stop:"coast", prompt:"Why can the Peruvian coast feel surprisingly dry?", fact:"Cold ocean currents + desert geography mean many coastal areas are arid, even near the sea.", why:"It’s a coast that can look desert-y—very different from tropical beaches." },
+      { stop:"coast", prompt:"Big city check: what’s Peru’s capital?", fact:"Lima is the capital of Peru.", why:"It’s a coastal capital with serious food culture and history." },
+      { stop:"coast", prompt:"Mind-bender: what are the Nazca Lines?", fact:"Huge geoglyphs scratched into Peru’s coastal desert (Nazca/Palpa area), made roughly between 500 BCE and 500 CE.", why:"They’re one of archaeology’s great mysteries—and are best seen from above." },
+      { stop:"coast", prompt:"Are the Nazca Lines UNESCO-protected?", fact:"Yes—“Lines and Geoglyphs of Nasca and Palpa” are recognized as a UNESCO World Heritage Site.", why:"Because they’re fragile and globally significant." },
+
+      // Andes
+      { stop:"andes", prompt:"What mountain range runs through Peru?", fact:"The Andes form Peru’s rugged spine.", why:"Altitude changes everything: weather, crops, towns, travel pace." },
+      { stop:"andes", prompt:"What’s Machu Picchu, in one sentence?", fact:"Machu Picchu is a famous Inca site in the Andes—and a UNESCO World Heritage Site (inscribed 1983).", why:"It’s iconic, but also a living landscape with strict conservation needs." },
+      { stop:"andes", prompt:"High lake flex: what’s special about Lake Titicaca?", fact:"Lake Titicaca is the world’s highest lake navigable to large vessels.", why:"It’s a cultural heartland around the Peru–Bolivia border." },
+      { stop:"andes", prompt:"Why do people talk about “altitude” so much in Peru?", fact:"Many Andean destinations sit very high above sea level, so you can feel breathless faster than you expect.", why:"Good travel move: slower first day + hydrate + easy walking." },
+      { stop:"andes", prompt:"Potato origin story?", fact:"Potatoes were domesticated in the region of modern-day southern Peru and northwestern Bolivia thousands of years ago.", why:"Peru still has mind-blowing potato variety—colors, shapes, flavors." },
+      { stop:"andes", prompt:"What’s ‘chuño’ (bonus word)?", fact:"A traditional Andean method of freeze-drying potatoes using cold nights and sunny days.", why:"It’s an ingenious food-tech adapted to high altitude." },
+
+      // Amazon
+      { stop:"amazon", prompt:"What’s ‘Amazonia’ in the Peru context?", fact:"Peru’s eastern side includes wet, forested Amazon Basin regions.", why:"It’s a huge biodiversity zone—very different from the coast and Andes." },
+      { stop:"amazon", prompt:"Two seasons you’ll often hear about in the rainforest?", fact:"People commonly talk about wetter vs. drier periods (varies by area and year).", why:"It affects wildlife viewing, river levels, and travel routes." },
+      { stop:"amazon", prompt:"What’s a ‘cloud forest’ vibe?", fact:"Where the Andes meet the Amazon, you can get misty, lush cloud forests.", why:"It’s a transition zone—often packed with birds and orchids." },
+      { stop:"amazon", prompt:"Quick animal vibe-check?", fact:"Think: colorful birds, monkeys, river life—plus a ton of insects.", why:"Pack light but smart: breathable layers + repellent." },
+      { stop:"amazon", prompt:"Amazon travel is mostly…", fact:"Rivers + boats + lodge networks (depending on the region).", why:"It’s a different rhythm than road-trip Peru." },
+      { stop:"amazon", prompt:"One practical difference vs. Andes travel?", fact:"Heat + humidity are the main challenge, not altitude.", why:"You’ll plan differently: shade, water, slow pace." },
+
+      // History
+      { stop:"history", prompt:"When was Peru’s independence declared?", fact:"Peru’s independence was declared on July 28, 1821.", why:"That date is central to Peru’s national celebrations." },
+      { stop:"history", prompt:"Who were the Incas (very short)?", fact:"A powerful Andean civilization whose empire centered around Cusco.", why:"Their architecture and roads still shape travel routes today." },
+      { stop:"history", prompt:"What’s a ‘sacred valley’ vibe (tourism term)?", fact:"A region near Cusco with major Inca sites, farming terraces, and river valleys.", why:"It’s often used to acclimate before higher treks." },
+      { stop:"history", prompt:"What’s an easy way to date the Nazca Lines?", fact:"Many were made between 500 BCE and 500 CE.", why:"That’s long before the Inca—Peru has deep layers of civilizations." },
+      { stop:"history", prompt:"Tiny language note that hints at history?", fact:"Quechua spread widely across the Andes before and during Inca times.", why:"You’ll still see Quechua words in place names and daily speech." },
+      { stop:"history", prompt:"Machu Picchu’s UNESCO angle?", fact:"UNESCO inscription helps protect both the archaeological site and its surrounding landscape.", why:"It’s not just ruins—it’s a whole ecosystem and cultural area." },
+
+      // People + language
+      { stop:"people", prompt:"What are Peru’s official languages?", fact:"Spanish is official, and (where they predominate) Quechua, Aymara, and other native tongues are official as well.", why:"Language in Peru is tied to region, identity, and history." },
+      { stop:"people", prompt:"A respectful travel move re: language?", fact:"Learn a few basics: “hola”, “gracias”… and if you’re in the Andes, try a couple Quechua greetings if offered locally.", why:"Even tiny effort reads as respect." },
+      { stop:"people", prompt:"Llama vs alpaca (quick vibe)?", fact:"Both are Andean camelids; alpacas are especially prized for soft fiber.", why:"Textiles are a major cultural and economic thread." },
+      { stop:"people", prompt:"What’s a ‘fiestas’ vibe?", fact:"Many towns have local festivals mixing indigenous and Catholic traditions.", why:"Music, dance, costumes—Peru’s culture is very alive." },
+      { stop:"people", prompt:"What’s a ‘market’ vibe in Peru?", fact:"Markets are often where daily life happens: produce, herbs, textiles, snacks.", why:"Great for learning by wandering (and tasting)." },
+      { stop:"people", prompt:"Peru is best understood as…", fact:"A mosaic: multiple regions, climates, languages, and cultural histories.", why:"That’s the whole ‘passport’ idea." },
+
+      // Food + culture
+      { stop:"food", prompt:"Peru’s most famous “raw fish” dish?", fact:"Ceviche: seafood cured quickly in citrus, often with onion and chili.", why:"It’s a coast-to-table signature." },
+      { stop:"food", prompt:"Why is ceviche often eaten earlier in the day?", fact:"Traditionally, it’s freshest when fish and citrus do their magic fast—many locals treat it like a lunch dish.", why:"Food culture has timing, not just recipes." },
+      { stop:"food", prompt:"What’s ‘aji’?", fact:"A family of Peruvian chilies used for heat + fruitiness (not just burn).", why:"Aji is a flavor backbone across dishes." },
+      { stop:"food", prompt:"Peru is obsessed with… potatoes.", fact:"There are many native varieties, especially from Andean regions.", why:"Different potatoes = different textures and dishes." },
+      { stop:"food", prompt:"A drink you’ll see everywhere?", fact:"Pisco-based drinks are popular—like the pisco sour (often associated with Lima).", why:"It’s a cultural icon (and a delicious one)." },
+      { stop:"food", prompt:"Food identity in one word?", fact:"Biodiversity.", why:"Multiple climates = insane ingredient range (sea, highlands, jungle)." },
+    ];
+
+    // -----------------------------
+    // State + persistence
+    // -----------------------------
+    const LS_KEY = "peruPassport_v1";
+    const state = {
+      stopId: STOPS[0].id,
+      indexByStop: Object.fromEntries(STOPS.map(s => [s.id, 0])),
+      revealed: false,
+      seen: {},     // cardId -> true
+      favorites: {},// cardId -> true
+      stamps: {}    // stopId -> true
+    };
+
+    function cardId(card){
+      // stable-ish id from content
+      return `${card.stop}::${card.prompt}`.toLowerCase();
+    }
+
+    function load(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(LS_KEY));
+        if(saved && typeof saved === "object"){
+          Object.assign(state, saved);
+        }
+      }catch(e){}
+    }
+    function save(){
+      localStorage.setItem(LS_KEY, JSON.stringify(state));
+    }
+
+    // -----------------------------
+    // Helpers
+    // -----------------------------
+    const $ = sel => document.querySelector(sel);
+    const tabsEl = document.querySelector(".tabs");
+
+    function stopCards(stopId){
+      return CARDS.filter(c => c.stop === stopId);
+    }
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function toast(msg){
+      const t = $("#toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toast._tm);
+      toast._tm = setTimeout(()=> t.classList.remove("show"), 1200);
+    }
+
+    // -----------------------------
+    // UI: Tabs
+    // -----------------------------
+    function renderTabs(){
+      tabsEl.innerHTML = "";
+      STOPS.forEach(s => {
+        const btn = document.createElement("button");
+        btn.className = "tabBtn";
+        btn.type = "button";
+        btn.role = "tab";
+        btn.setAttribute("aria-selected", s.id === state.stopId ? "true" : "false");
+        btn.textContent = `${s.emoji} ${s.name}`;
+        btn.addEventListener("click", () => {
+          state.stopId = s.id;
+          state.revealed = false;
+          save();
+          renderTabs();
+          renderCard();
+          renderSidebar();
+        });
+        tabsEl.appendChild(btn);
+      });
+    }
+
+    // -----------------------------
+    // UI: Card
+    // -----------------------------
+    function currentIndex(){
+      const list = stopCards(state.stopId);
+      const i = state.indexByStop[state.stopId] ?? 0;
+      return clamp(i, 0, Math.max(0, list.length - 1));
+    }
+
+    function setIndex(i){
+      const list = stopCards(state.stopId);
+      state.indexByStop[state.stopId] = clamp(i, 0, Math.max(0, list.length - 1));
+      save();
+    }
+
+    function seenCountForStop(stopId){
+      const list = stopCards(stopId);
+      let c = 0;
+      for(const card of list){
+        if(state.seen[cardId(card)]) c++;
+      }
+      return c;
+    }
+
+    function maybeAwardStamp(stopId){
+      const list = stopCards(stopId);
+      if(list.length === 0) return;
+
+      const allSeen = list.every(card => !!state.seen[cardId(card)]);
+      if(allSeen && !state.stamps[stopId]){
+        state.stamps[stopId] = true;
+        toast("🛂 Stamp earned!");
+        save();
+      }
+    }
+
+    function renderProgress(){
+      const list = stopCards(state.stopId);
+      const total = Math.max(1, list.length);
+      const idx = currentIndex();
+      const seen = seenCountForStop(state.stopId);
+      $("#posLabel").textContent = String(idx + 1);
+      $("#totalLabel").textContent = String(total);
+      $("#seenLabel").textContent = String(seen);
+
+      const pct = Math.round((seen / total) * 100);
+      $("#barFill").style.width = pct + "%";
+
+      $("#favCount").textContent = String(Object.keys(state.favorites).length);
+      $("#stampCount").textContent = String(Object.keys(state.stamps).length);
+    }
+
+    function renderStarButton(id){
+      const isFav = !!state.favorites[id];
+      const btn = $("#btnStar");
+      btn.setAttribute("aria-pressed", isFav ? "true" : "false");
+      btn.querySelector("span[aria-hidden]").textContent = isFav ? "★" : "☆";
+      btn.title = isFav ? "Unstar this card" : "Star this card";
+    }
+
+    function renderCard(){
+      const list = stopCards(state.stopId);
+      const idx = currentIndex();
+      const card = list[idx] || { stop: state.stopId, prompt:"No cards here yet.", fact:"", why:"" };
+      const id = cardId(card);
+
+      const stopMeta = STOPS.find(s => s.id === state.stopId);
+      $("#catLabel").textContent = `${stopMeta ? stopMeta.name : state.stopId}`;
+      // Change dot color subtly per stop
+      const dot = $("#catDot");
+      const palette = {
+        coast: "rgba(123,214,164,.9)",
+        andes: "rgba(255,184,107,.9)",
+        amazon: "rgba(123,214,164,.75)",
+        history: "rgba(255,184,107,.75)",
+        people: "rgba(123,214,164,.6)",
+        food: "rgba(255,184,107,.6)"
+      };
+      dot.style.background = palette[state.stopId] || "rgba(123,214,164,.9)";
+      dot.style.boxShadow = `0 0 0 6px ${palette[state.stopId]?.replace("0.9","0.12").replace("0.75","0.10").replace("0.6","0.08") || "rgba(123,214,164,.12)"}`;
+
+      $("#prompt").textContent = card.prompt;
+      $("#fact").textContent = card.fact;
+      $("#why").textContent = card.why;
+
+      // Reveal state
+      const reveal = $("#reveal");
+      reveal.classList.toggle("hidden", !state.revealed);
+
+      // Hint line
+      const seen = !!state.seen[id];
+      $("#hint").textContent = state.revealed
+        ? (seen ? "Nice. Double-tap again to unmark “seen”." : "Double-tap to mark “seen”.")
+        : (seen ? "Seen ✓ — tap to reveal again." : "Tap to reveal.");
+
+      renderStarButton(id);
+      renderProgress();
+      renderSidebar();
+    }
+
+    // -----------------------------
+    // Sidebar: Favorites list
+    // -----------------------------
+    function renderSidebar(){
+      const favIds = Object.keys(state.favorites);
+      const favEl = $("#favList");
+
+      if(favIds.length === 0){
+        favEl.textContent = "Star cards to save them here.";
+        return;
+      }
+
+      // Build a tiny list of prompts
+      const items = [];
+      for(const c of CARDS){
+        const id = cardId(c);
+        if(state.favorites[id]){
+          const stopName = (STOPS.find(s => s.id === c.stop)?.name) || c.stop;
+          items.push(`• ${c.prompt} (${stopName})`);
+        }
+      }
+
+      favEl.textContent = items.slice(0, 10).join("\n") + (items.length > 10 ? `\n… +${items.length - 10} more` : "");
+      favEl.style.whiteSpace = "pre-line";
+    }
+
+    // -----------------------------
+    // Interactions
+    // -----------------------------
+    let lastTapTime = 0;
+
+    function toggleReveal(){
+      state.revealed = !state.revealed;
+      save();
+      renderCard();
+    }
+
+    function toggleSeenForCurrent(){
+      const list = stopCards(state.stopId);
+      const card = list[currentIndex()];
+      if(!card) return;
+      const id = cardId(card);
+
+      state.seen[id] = !state.seen[id];
+      save();
+      if(state.seen[id]) toast("Seen ✓");
+      else toast("Unseen");
+      maybeAwardStamp(state.stopId);
+      renderCard();
+    }
+
+    function next(){
+      setIndex(currentIndex() + 1);
+      state.revealed = false;
+      save();
+      renderCard();
+    }
+    function prev(){
+      setIndex(currentIndex() - 1);
+      state.revealed = false;
+      save();
+      renderCard();
+    }
+
+    $("#btnNext").addEventListener("click", next);
+    $("#btnPrev").addEventListener("click", prev);
+
+    // Tap area: single tap toggles reveal, double tap toggles seen
+    const tapArea = $("#cardTapArea");
+    tapArea.addEventListener("click", () => {
+      const now = Date.now();
+      if(now - lastTapTime < 320){
+        toggleSeenForCurrent();
+        lastTapTime = 0;
+      }else{
+        toggleReveal();
+        lastTapTime = now;
+      }
+    });
+    tapArea.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        toggleReveal();
+      }
+    });
+
+    // Star
+    $("#btnStar").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const list = stopCards(state.stopId);
+      const card = list[currentIndex()];
+      if(!card) return;
+      const id = cardId(card);
+      state.favorites[id] = !state.favorites[id];
+      save();
+      toast(state.favorites[id] ? "⭐ Saved" : "Removed");
+      renderCard();
+    });
+
+    // Shuffle stop
+    $("#btnShuffle").addEventListener("click", () => {
+      // Shuffle cards within stop by permuting CARDS in-place (only for that stop).
+      // (Cute hack: stable across reloads only if you keep it open; ok for learning.)
+      const stop = state.stopId;
+      const idxs = [];
+      for(let i=0;i<CARDS.length;i++){
+        if(CARDS[i].stop === stop) idxs.push(i);
+      }
+      for(let i=idxs.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        const a = idxs[i], b = idxs[j];
+        const tmp = CARDS[a]; CARDS[a] = CARDS[b]; CARDS[b] = tmp;
+      }
+      state.revealed = false;
+      setIndex(0);
+      toast("Shuffled");
+      renderCard();
+    });
+
+    // Random card
+    $("#btnRandom").addEventListener("click", () => {
+      const list = stopCards(state.stopId);
+      if(list.length === 0) return;
+      const i = Math.floor(Math.random()*list.length);
+      setIndex(i);
+      state.revealed = false;
+      save();
+      renderCard();
+    });
+
+    // Reset
+    $("#btnReset").addEventListener("click", () => {
+      if(!confirm("Reset local progress (seen, favorites, stamps)?")) return;
+      localStorage.removeItem(LS_KEY);
+      location.reload();
+    });
+
+    // -----------------------------
+    // Quiz
+    // -----------------------------
+    const modal = $("#modalOverlay");
+    let quiz = null;
+
+    function openQuiz(){
+      const list = stopCards(state.stopId);
+      if(list.length < 4){
+        toast("Need at least 4 cards to quiz.");
+        return;
+      }
+      quiz = {
+        stopId: state.stopId,
+        pool: list.slice(),
+        score: 0,
+        asked: 0,
+        total: Math.min(6, list.length) // quick
+      };
+      modal.classList.add("show");
+      nextQuestion();
+    }
+
+    function closeQuiz(){
+      modal.classList.remove("show");
+      quiz = null;
+    }
+
+    function pickDistinct(arr, n){
+      const copy = arr.slice();
+      const out = [];
+      while(out.length < n && copy.length){
+        const i = Math.floor(Math.random()*copy.length);
+        out.push(copy.splice(i,1)[0]);
+      }
+      return out;
+    }
+
+    function nextQuestion(){
+      if(!quiz) return;
+
+      if(quiz.asked >= quiz.total){
+        $("#quizMeta").textContent = "Done!";
+        $("#quizQ").textContent = `Final score: ${quiz.score}/${quiz.total} 🎉`;
+        $("#quizChoices").innerHTML = "";
+        $("#btnNextQ").textContent = "Close";
+        $("#quizScore").textContent = String(quiz.score);
+        $("#quizTotal").textContent = String(quiz.total);
+        return;
+      }
+
+      $("#btnNextQ").textContent = "Next question →";
+
+      // Question: show prompt, choose correct fact among 4
+      const list = stopCards(quiz.stopId);
+      const target = list[Math.floor(Math.random()*list.length)];
+      const correct = target.fact;
+
+      const distractors = pickDistinct(
+        list.filter(c => c.fact !== correct).map(c => c.fact),
+        3
+      );
+      const choices = [correct, ...distractors].sort(()=> Math.random() - 0.5);
+
+      quiz.current = { target, correct, choices, locked:false };
+      quiz.asked++;
+
+      $("#quizMeta").textContent = `${STOPS.find(s=>s.id===quiz.stopId)?.name || quiz.stopId} • Question ${quiz.asked}/${quiz.total}`;
+      $("#quizQ").textContent = `Which fact matches: “${target.prompt}”`;
+      $("#quizScore").textContent = String(quiz.score);
+      $("#quizTotal").textContent = String(quiz.total);
+
+      const choicesEl = $("#quizChoices");
+      choicesEl.innerHTML = "";
+      choices.forEach(txt => {
+        const b = document.createElement("button");
+        b.className = "choice";
+        b.type = "button";
+        b.textContent = txt;
+        b.addEventListener("click", () => {
+          if(quiz.current.locked) return;
+          quiz.current.locked = true;
+
+          const isCorrect = (txt === quiz.current.correct);
+          if(isCorrect){
+            b.classList.add("correct");
+            quiz.score++;
+            $("#quizScore").textContent = String(quiz.score);
+            toast("✅ Correct");
+          }else{
+            b.classList.add("wrong");
+            // mark the correct one
+            [...choicesEl.querySelectorAll(".choice")].forEach(el => {
+              if(el.textContent === quiz.current.correct) el.classList.add("correct");
+            });
+            toast("❌ Not quite");
+          }
+        });
+        choicesEl.appendChild(b);
+      });
+    }
+
+    $("#btnQuiz").addEventListener("click", openQuiz);
+    $("#btnCloseQuiz").addEventListener("click", closeQuiz);
+    $("#btnNextQ").addEventListener("click", () => {
+      if(!quiz) return;
+      if($("#btnNextQ").textContent === "Close"){ closeQuiz(); return; }
+      nextQuestion();
+    });
+
+    // close when tapping outside modal
+    modal.addEventListener("click", (e) => {
+      if(e.target === modal) closeQuiz();
+    });
+
+    // -----------------------------
+    // Init
+    // -----------------------------
+    load();
+    renderTabs();
+    renderCard();
+  </script>
+</body>
+</html>
