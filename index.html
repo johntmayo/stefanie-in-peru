@@ -3,1150 +3,1012 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Peru Passport — bite-sized learning</title>
+  <title>Peru Deep Dive — click‑thru experience</title>
   <style>
     :root{
-      --bg:#0f1412;
-      --panel:#151c18;
-      --panel2:#101612;
-      --text:#e7efe9;
-      --muted:#b8c6be;
+      --bg:#0d1210;
+      --panel: rgba(255,255,255,.05);
+      --panel2: rgba(0,0,0,.18);
+      --text:#e9f2ec;
+      --muted:#b7c6bd;
       --faint:#7f8f86;
-      --accent:#7bd6a4;
-      --accent2:#ffb86b;
-      --danger:#ff6b6b;
-      --stroke:rgba(255,255,255,.10);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 18px;
-      --tap: 52px;
-      --max: 980px;
+      --stroke: rgba(255,255,255,.12);
+      --shadow: 0 16px 40px rgba(0,0,0,.45);
+      --r: 18px;
+      --max: 720px;
     }
-
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       background:
-        radial-gradient(900px 600px at 10% -10%, rgba(123,214,164,.18), transparent 60%),
+        radial-gradient(800px 600px at 10% -10%, rgba(123,214,164,.18), transparent 55%),
         radial-gradient(900px 600px at 110% 10%, rgba(255,184,107,.15), transparent 55%),
         radial-gradient(900px 600px at 50% 120%, rgba(123,214,164,.10), transparent 60%),
         var(--bg);
-      color:var(--text);
+      color: var(--text);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      overflow:hidden; /* app-like */
     }
+    button, input, textarea { font: inherit; }
+    a{ color: inherit; }
 
-    a{ color:inherit; }
-    button, input { font: inherit; }
-    .wrap{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 18px 14px 28px;
-    }
-
-    header{
+    .app{
+      height:100%;
       display:flex;
-      gap:12px;
-      align-items:flex-start;
-      justify-content:space-between;
-      margin: 4px 0 14px;
+      flex-direction:column;
     }
 
-    .brand{
+    /* Top bar */
+    .topbar{
+      padding: 12px 14px 10px;
       display:flex;
-      gap:12px;
       align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .brand{
+      display:flex; gap:10px; align-items:center;
+      min-width: 0;
     }
     .logo{
-      width:44px; height:44px;
-      border-radius: 14px;
-      background:
-        linear-gradient(145deg, rgba(123,214,164,.25), rgba(255,184,107,.18)),
-        rgba(255,255,255,.06);
+      width:42px; height:42px; border-radius: 14px;
+      background: linear-gradient(145deg, rgba(123,214,164,.22), rgba(255,184,107,.16)), rgba(255,255,255,.06);
       border:1px solid var(--stroke);
       box-shadow: var(--shadow);
-      display:grid;
-      place-items:center;
+      display:grid; place-items:center;
       flex:0 0 auto;
     }
-    .logo span{ font-size:22px; filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); }
-    .title h1{
-      font-size: 18px;
+    .logo span{ font-size: 22px; }
+    .titles{
+      min-width: 0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .titles .name{
+      font-size: 14px;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
       margin:0;
-      letter-spacing: .2px;
-      line-height: 1.15;
     }
-    .title p{
-      margin:4px 0 0;
+    .titles .sub{
+      font-size: 12px;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.35;
-      max-width: 42ch;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      margin:0;
     }
-
-    .topActions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:flex-end;
-      flex-wrap:wrap;
+    .meta{
+      display:flex; gap:10px; align-items:center; justify-content:flex-end; flex-wrap:wrap;
     }
-
     .pill{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      padding: 10px 12px;
+      display:flex; gap:8px; align-items:center;
+      padding: 8px 10px;
       border-radius: 999px;
       border: 1px solid var(--stroke);
       background: rgba(255,255,255,.05);
-      box-shadow: 0 6px 18px rgba(0,0,0,.25);
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12px;
       user-select:none;
       white-space:nowrap;
     }
     .pill strong{ color: var(--text); font-weight:700; }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    @media (min-width: 860px){
-      .grid{ grid-template-columns: 1.2fr .8fr; align-items:start; }
-    }
-
-    .panel{
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--stroke);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    .panelHead{
-      padding: 12px 12px 10px;
-      border-bottom: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), transparent);
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
-
-    .tabs{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    .tabBtn{
-      min-height: 40px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.15);
-      color: var(--muted);
-      cursor:pointer;
-      transition: transform .08s ease, background .15s ease, color .15s ease;
-      user-select:none;
-    }
-    .tabBtn:active{ transform: scale(.98); }
-    .tabBtn[aria-selected="true"]{
-      background: rgba(123,214,164,.16);
-      border-color: rgba(123,214,164,.35);
-      color: var(--text);
-    }
-
-    .controls{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-
-    .btn{
-      min-height: 40px;
-      padding: 9px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      cursor:pointer;
-      transition: transform .08s ease, background .15s ease;
-      user-select:none;
-    }
-    .btn:active{ transform: scale(.98); }
-    .btn.primary{
-      background: rgba(123,214,164,.18);
-      border-color: rgba(123,214,164,.35);
-    }
-    .btn.ghost{
-      background: rgba(0,0,0,.10);
-      color: var(--muted);
-    }
-
-    .progressRow{
-      padding: 10px 12px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
+    /* Progress */
+    .progressWrap{ padding: 0 14px 10px; }
     .bar{
       height:10px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--stroke);
-      border-radius: 999px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
       overflow:hidden;
-      flex:1;
-      min-width: 160px;
     }
     .bar > div{
       height:100%;
       width:0%;
-      background: linear-gradient(90deg, rgba(123,214,164,.9), rgba(255,184,107,.85));
-      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(123,214,164,.92), rgba(255,184,107,.85));
+      border-radius:999px;
       transition: width .25s ease;
     }
-    .progressMeta{
-      color: var(--muted);
-      font-size: 13px;
-      white-space:nowrap;
-    }
-
-    /* Flashcard */
-    .cardZone{
-      padding: 12px;
-    }
-    .flashcard{
-      position:relative;
-      border-radius: 18px;
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.06));
-      overflow:hidden;
-      box-shadow: 0 18px 40px rgba(0,0,0,.35);
-    }
-
-    .cardTop{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      padding: 12px 12px 8px;
-    }
-    .badge{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.12);
+    .progressRow{
+      margin-top: 8px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
       color: var(--muted);
       font-size: 12px;
     }
-    .badge .dot{
-      width:10px; height:10px;
-      border-radius:999px;
-      background: rgba(123,214,164,.9);
-      box-shadow: 0 0 0 6px rgba(123,214,164,.12);
-    }
+    .hint{ color: var(--faint); }
 
-    .star{
-      width: 42px;
-      height: 42px;
+    /* Stage area */
+    .stage{
+      flex:1;
       display:grid;
       place-items:center;
-      border-radius: 14px;
+      padding: 0 14px 14px;
+    }
+    .card{
+      width: min(100%, var(--max));
+      border-radius: var(--r);
       border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.12);
-      cursor:pointer;
-      user-select:none;
-    }
-    .star[aria-pressed="true"]{
-      background: rgba(255,184,107,.16);
-      border-color: rgba(255,184,107,.35);
-    }
-    .star span{ font-size: 18px; }
-
-    .face{
-      padding: 6px 14px 14px;
-    }
-    .prompt{
-      font-size: 18px;
-      margin: 8px 0 8px;
-      line-height: 1.25;
-      letter-spacing:.1px;
-    }
-    .hint{
-      margin: 0 0 10px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.35;
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
+      overflow:hidden;
     }
 
-    .reveal{
-      margin-top: 10px;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px dashed rgba(255,255,255,.22);
-      background: rgba(0,0,0,.12);
-    }
-    .reveal.hidden{
-      display:none;
-    }
-    .fact{
-      margin:0;
-      font-size: 15px;
-      line-height: 1.42;
-      color: var(--text);
-    }
-    .why{
-      margin: 8px 0 0;
-      font-size: 13px;
-      line-height: 1.4;
-      color: var(--muted);
-    }
-
-    .tapRow{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      padding: 12px;
-      border-top: 1px solid var(--stroke);
-      background: rgba(0,0,0,.10);
-      flex-wrap:wrap;
-    }
-    .kbd{
-      color: var(--faint);
-      font-size: 12px;
-    }
-
-    /* Sidebar */
-    .sideBody{ padding: 12px; display:grid; gap:12px; }
-
-    .mini{
-      padding: 12px;
-      border-radius: 16px;
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.12);
-    }
-    .mini h3{
-      margin:0 0 6px;
-      font-size: 14px;
-      letter-spacing:.2px;
-    }
-    .mini p{
-      margin:0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .imgGrid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    .ph{
-      aspect-ratio: 1 / 1;
-      border-radius: 14px;
-      border: 1px solid var(--stroke);
+    /* “Scene” header with optional image */
+    .sceneMedia{
+      position:relative;
+      height: 180px;
       background:
-        radial-gradient(70% 70% at 30% 25%, rgba(123,214,164,.22), transparent 60%),
-        radial-gradient(70% 70% at 70% 75%, rgba(255,184,107,.18), transparent 60%),
-        rgba(255,255,255,.04);
+        radial-gradient(70% 70% at 30% 25%, rgba(123,214,164,.20), transparent 60%),
+        radial-gradient(70% 70% at 70% 75%, rgba(255,184,107,.16), transparent 60%),
+        rgba(0,0,0,.14);
+      border-bottom: 1px solid var(--stroke);
       display:grid;
       place-items:center;
       overflow:hidden;
-      position:relative;
     }
-    .ph img{
+    .sceneMedia img{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
+      filter: saturate(1.05) contrast(1.05);
     }
-    .ph .label{
+    .mediaOverlay{
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.55));
+      pointer-events:none;
+    }
+    .sceneTag{
       position:absolute;
-      inset:auto 8px 8px 8px;
-      padding: 6px 8px;
-      border-radius: 12px;
-      background: rgba(0,0,0,.40);
-      border:1px solid rgba(255,255,255,.12);
-      color: rgba(255,255,255,.92);
-      font-size: 11px;
-      line-height:1.2;
+      left: 12px;
+      top: 12px;
+      display:inline-flex; gap:8px; align-items:center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.35);
       backdrop-filter: blur(6px);
+      color: rgba(255,255,255,.92);
+      font-size: 12px;
     }
-    .ph .emoji{ font-size: 22px; opacity:.9; }
-
-    /* Quiz modal */
-    .modalOverlay{
-      position:fixed;
-      inset:0;
-      background: rgba(0,0,0,.55);
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: rgba(123,214,164,.92);
+      box-shadow: 0 0 0 6px rgba(123,214,164,.12);
+    }
+    .emojiFallback{
+      font-size: 34px;
+      opacity: .9;
+      text-shadow: 0 10px 22px rgba(0,0,0,.45);
       display:none;
-      align-items:flex-end;
-      justify-content:center;
-      padding: 14px;
-      z-index:50;
-    }
-    .modalOverlay.show{ display:flex; }
-
-    .modal{
-      width:min(720px, 100%);
-      border-radius: 22px;
-      border: 1px solid var(--stroke);
-      background:
-        radial-gradient(900px 500px at 30% 0%, rgba(123,214,164,.18), transparent 55%),
-        rgba(15,20,18,.96);
-      box-shadow: 0 30px 80px rgba(0,0,0,.6);
-      overflow:hidden;
     }
 
-    .modalHead{
-      padding: 12px 12px 10px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      border-bottom: 1px solid var(--stroke);
+    /* Scene body */
+    .sceneBody{
+      padding: 14px 14px 12px;
+      display:grid;
+      gap:12px;
     }
-    .modalHead h2{
+    .sceneTitle{
       margin:0;
-      font-size: 15px;
-      letter-spacing:.2px;
-    }
-    .modalBody{ padding: 12px; }
-    .q{
-      margin: 4px 0 10px;
       font-size: 16px;
-      line-height:1.3;
+      letter-spacing:.2px;
+      line-height: 1.2;
     }
-    .choices{
+    .sceneText{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .chunks{
       display:grid;
       gap:10px;
     }
-    .choice{
-      text-align:left;
+    .chunk{
       padding: 12px;
       border-radius: 16px;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.05);
-      cursor:pointer;
+      background: rgba(0,0,0,.14);
     }
-    .choice:active{ transform: scale(.99); }
-    .choice.correct{
-      border-color: rgba(123,214,164,.55);
-      background: rgba(123,214,164,.14);
+    .chunkHead{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
     }
-    .choice.wrong{
-      border-color: rgba(255,107,107,.55);
-      background: rgba(255,107,107,.10);
+    .chunkHead strong{
+      font-size: 13px;
+      letter-spacing:.15px;
     }
-    .modalFoot{
-      padding: 12px;
-      display:flex;
-      gap:10px;
+    .chip{
+      display:inline-flex;
       align-items:center;
-      justify-content:space-between;
-      border-top: 1px solid var(--stroke);
-      flex-wrap:wrap;
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-size: 12px;
+      user-select:none;
+      cursor:pointer;
+      flex:0 0 auto;
+      min-height: 34px;
     }
-    .small{
+    .chip:active{ transform: scale(.99); }
+    .reveal{
+      display:none;
+      margin-top: 10px;
       color: var(--muted);
       font-size: 13px;
+      line-height: 1.55;
     }
+    .reveal.show{ display:block; }
 
-    /* Tiny toast */
-    .toast{
-      position:fixed;
-      left:50%;
-      transform:translateX(-50%);
-      bottom: 14px;
-      background: rgba(0,0,0,.55);
-      border:1px solid rgba(255,255,255,.14);
-      color: var(--text);
-      padding: 10px 12px;
+    .termRow{
+      display:flex; flex-wrap:wrap; gap:8px;
+    }
+    .termBtn{
+      min-height: 36px;
+      padding: 7px 10px;
       border-radius: 999px;
-      display:none;
-      z-index:60;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 16px 40px rgba(0,0,0,.45);
-      font-size: 13px;
-      max-width: calc(100% - 28px);
-      text-align:center;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
     }
-    .toast.show{ display:block; }
+    .termBtn[aria-expanded="true"]{
+      background: rgba(123,214,164,.14);
+      border-color: rgba(123,214,164,.35);
+      color: var(--text);
+    }
+    .termDef{
+      display:none;
+      margin-top: 10px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .termDef.show{ display:block; }
 
-    .srOnly{
-      position:absolute !important;
-      width:1px; height:1px;
-      padding:0; margin:-1px;
-      overflow:hidden; clip:rect(0,0,0,0);
-      white-space:nowrap; border:0;
+    .prompt{
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(255,255,255,.18);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .prompt strong{ color: var(--text); }
+
+    /* Bottom nav */
+    .nav{
+      padding: 10px 14px 14px;
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .navLeft, .navRight{ display:flex; gap:10px; align-items:center; }
+    .btn{
+      min-height: 44px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn:active{ transform: scale(.99); }
+    .btn.primary{
+      background: rgba(255,184,107,.16);
+      border-color: rgba(255,184,107,.35);
+    }
+    .btn.ghost{
+      background: rgba(0,0,0,.12);
+      color: var(--muted);
+    }
+    .btn[disabled]{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+    .k{
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
+      font-size: 12px;
+      user-select:none;
+    }
+
+    /* Help sheet */
+    .sheetBack{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      padding: 14px;
+      z-index: 50;
+    }
+    .sheetBack.show{ display:grid; place-items:end center; }
+    .sheet{
+      width: min(100%, var(--max));
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: rgba(20,26,22,.95);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .sheetHead{
+      padding: 12px 12px 10px;
+      border-bottom: 1px solid var(--stroke);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .sheetHead h3{ margin:0; font-size: 14px; letter-spacing:.2px; }
+    .sheetBody{
+      padding: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      display:grid;
+      gap:10px;
+    }
+    .sheetBody ul{ margin:0; padding-left: 18px; display:grid; gap:6px; }
+    .small{ color: var(--faint); font-size: 12px; line-height: 1.4; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
+  <div class="app" id="app">
+    <div class="topbar">
       <div class="brand">
         <div class="logo" aria-hidden="true"><span>🇵🇪</span></div>
-        <div class="title">
-          <h1>Peru Passport</h1>
-          <p>Tap-to-reveal flashcards. Star favorites. Take a quick quiz. Collect stamps across six “mini-worlds.”</p>
+        <div class="titles">
+          <p class="name" id="courseName">Peru Deep Dive</p>
+          <p class="sub" id="sceneSub">Scene 1 of 18</p>
         </div>
       </div>
-      <div class="topActions">
-        <div class="pill" title="Your saved favorites">
-          ⭐ <strong id="favCount">0</strong> <span>favorites</span>
-        </div>
-        <div class="pill" title="Your stamps earned (complete a stop)">
-          🛂 <strong id="stampCount">0</strong> <span>stamps</span>
-        </div>
+      <div class="meta">
+        <div class="pill">🧠 <strong id="deepCount">0</strong>/<span id="deepTotal">18</span></div>
+        <button class="btn ghost" id="btnHelp" style="min-height:40px;">How to use</button>
       </div>
-    </header>
-
-    <div class="grid">
-      <!-- Main panel -->
-      <section class="panel" aria-label="Flashcards">
-        <div class="panelHead">
-          <div class="tabs" role="tablist" aria-label="Stops">
-            <!-- tabs injected -->
-          </div>
-          <div class="controls">
-            <button class="btn ghost" id="btnShuffle" title="Shuffle this stop">🔀 Shuffle</button>
-            <button class="btn ghost" id="btnRandom" title="Jump to a random card">🎲 Random</button>
-            <button class="btn primary" id="btnQuiz" title="Quick quiz from this stop">🧠 Quiz</button>
-          </div>
-        </div>
-
-        <div class="progressRow">
-          <div class="bar" aria-label="Progress"><div id="barFill"></div></div>
-          <div class="progressMeta"><span id="posLabel">1</span>/<span id="totalLabel">1</span> • <span id="seenLabel">0</span> seen</div>
-        </div>
-
-        <div class="cardZone">
-          <article class="flashcard" id="flashcard" aria-live="polite">
-            <div class="cardTop">
-              <div class="badge"><span class="dot" id="catDot"></span><span id="catLabel">Stop</span></div>
-              <button class="star" id="btnStar" aria-pressed="false" title="Star this card">
-                <span aria-hidden="true">☆</span>
-                <span class="srOnly">Star</span>
-              </button>
-            </div>
-
-            <div class="face" id="cardTapArea" role="button" tabindex="0" aria-label="Tap to reveal or hide">
-              <p class="prompt" id="prompt">…</p>
-              <p class="hint" id="hint">Tap to reveal.</p>
-
-              <div class="reveal hidden" id="reveal">
-                <p class="fact" id="fact">…</p>
-                <p class="why" id="why">…</p>
-              </div>
-            </div>
-
-            <div class="tapRow">
-              <button class="btn" id="btnPrev">← Prev</button>
-              <div class="kbd">Tip: tap the card to reveal • double-tap = mark “seen”</div>
-              <button class="btn" id="btnNext">Next →</button>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <!-- Sidebar -->
-      <aside class="panel" aria-label="Extras">
-        <div class="panelHead">
-          <div class="badge"><span class="dot" style="background:rgba(255,184,107,.9); box-shadow:0 0 0 6px rgba(255,184,107,.12)"></span> Extras</div>
-          <button class="btn ghost" id="btnReset" title="Reset progress (local only)">♻️ Reset</button>
-        </div>
-
-        <div class="sideBody">
-          <div class="mini">
-            <h3>How this works</h3>
-            <p>
-              Pick a stop → tap to reveal. Double-tap the card to mark it “seen.”
-              When you’ve seen every card in a stop, you earn a stamp.
-            </p>
-          </div>
-
-          <div class="mini">
-            <h3>Images (max 6)</h3>
-            <p style="margin-bottom:10px;">
-              Drop your own images into the <code>images/</code> folder and update the <code>src</code> paths below.
-              I kept it to six.
-            </p>
-            <div class="imgGrid">
-              <div class="ph">
-                <!-- Replace src with your file -->
-                <img src="images/machu-picchu.jpg" alt="Machu Picchu (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
-                <div class="emoji" aria-hidden="true" style="display:none">🏛️</div>
-                <div class="label">Machu Picchu</div>
-              </div>
-              <div class="ph">
-                <img src="images/andes.jpg" alt="Andes mountains (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
-                <div class="emoji" aria-hidden="true" style="display:none">⛰️</div>
-                <div class="label">The Andes</div>
-              </div>
-              <div class="ph">
-                <img src="images/amazon.jpg" alt="Amazon rainforest in Peru (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
-                <div class="emoji" aria-hidden="true" style="display:none">🌿</div>
-                <div class="label">Amazonia</div>
-              </div>
-              <div class="ph">
-                <img src="images/ceviche.jpg" alt="Ceviche (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
-                <div class="emoji" aria-hidden="true" style="display:none">🍋</div>
-                <div class="label">Ceviche</div>
-              </div>
-              <div class="ph">
-                <img src="images/nazca.jpg" alt="Nazca lines (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
-                <div class="emoji" aria-hidden="true" style="display:none">🌀</div>
-                <div class="label">Nazca Lines</div>
-              </div>
-              <div class="ph">
-                <img src="images/alpaca.jpg" alt="Alpaca or llama (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
-                <div class="emoji" aria-hidden="true" style="display:none">🦙</div>
-                <div class="label">Alpaca / Llama</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="mini">
-            <h3>Favorites</h3>
-            <p id="favList">Star cards to save them here.</p>
-          </div>
-        </div>
-      </aside>
     </div>
-  </div>
 
-  <!-- Quiz modal -->
-  <div class="modalOverlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Quick quiz">
-    <div class="modal">
-      <div class="modalHead">
-        <h2>Quick Quiz</h2>
-        <button class="btn ghost" id="btnCloseQuiz">✕ Close</button>
+    <div class="progressWrap">
+      <div class="bar" aria-label="Progress"><div id="barFill"></div></div>
+      <div class="progressRow">
+        <div><span id="chapterMini">Chapter: …</span> <span class="hint">• tap “More” in each card</span></div>
+        <div class="hint"><span class="k">←</span> <span class="k">→</span> or swipe</div>
       </div>
-      <div class="modalBody">
-        <div class="small" id="quizMeta">…</div>
-        <p class="q" id="quizQ">…</p>
-        <div class="choices" id="quizChoices"></div>
+    </div>
+
+    <main class="stage" aria-label="Scene">
+      <div class="card" id="card">
+        <div class="sceneMedia" id="sceneMedia">
+          <img id="sceneImg" src="" alt="" style="display:none" />
+          <div class="emojiFallback" id="emojiFallback" aria-hidden="true">🗺️</div>
+          <div class="mediaOverlay" aria-hidden="true"></div>
+          <div class="sceneTag"><span class="dot" id="sceneDot"></span><span id="sceneTagText">…</span></div>
+        </div>
+
+        <div class="sceneBody">
+          <h2 class="sceneTitle" id="sceneTitle">…</h2>
+          <p class="sceneText" id="sceneIntro">…</p>
+
+          <div class="chunks" id="chunks"></div>
+
+          <div class="prompt" id="promptBox" style="display:none;"></div>
+
+          <div class="chunk" id="termsBox" style="display:none;">
+            <div class="chunkHead">
+              <strong>Key terms (tap to define)</strong>
+              <span class="chip" id="termsHint">Tap</span>
+            </div>
+            <div class="termRow" id="termRow"></div>
+            <div class="termDef" id="termDef"></div>
+          </div>
+
+          <div class="small" id="sourcesLine" style="display:none;"></div>
+        </div>
+
+        <div class="nav">
+          <div class="navLeft">
+            <button class="btn ghost" id="btnBack">Back</button>
+            <button class="btn ghost" id="btnRestart">Restart</button>
+          </div>
+          <div class="navRight">
+            <button class="btn" id="btnMark">Mark learned</button>
+            <button class="btn primary" id="btnNext">Next</button>
+          </div>
+        </div>
       </div>
-      <div class="modalFoot">
-        <div class="small">Score: <strong id="quizScore">0</strong>/<span id="quizTotal">0</span></div>
-        <button class="btn primary" id="btnNextQ">Next question →</button>
+    </main>
+
+    <!-- Help sheet -->
+    <div class="sheetBack" id="sheetBack" role="dialog" aria-modal="true" aria-label="How to use">
+      <div class="sheet">
+        <div class="sheetHead">
+          <h3>How this works</h3>
+          <button class="btn ghost" id="btnCloseSheet" style="min-height:40px;">Close</button>
+        </div>
+        <div class="sheetBody">
+          <p>This is a click‑thru “field guide.” Each scene is a mini‑lesson with depth.</p>
+          <ul>
+            <li>Tap <strong>More</strong> inside each card to reveal the deeper explanation.</li>
+            <li>Tap <strong>Key terms</strong> pills for definitions.</li>
+            <li>Tap <strong>Mark learned</strong> to keep track of what you actually absorbed (saved locally).</li>
+            <li>Use <strong>Next</strong>, arrow keys, or swipe.</li>
+          </ul>
+          <p class="small">Optional images: place up to 6 images in <code>images/</code> (filenames listed inside the file). If missing, the app shows emoji placeholders.</p>
+        </div>
       </div>
     </div>
   </div>
-
-  <div class="toast" id="toast" aria-live="polite">Saved.</div>
 
   <script>
-    // -----------------------------
-    // Data: bite-sized flashcards
-    // -----------------------------
-    const STOPS = [
-      { id:"coast",  name:"Coast (Costa)",   emoji:"🌊" },
-      { id:"andes",  name:"Andes (Sierra)",  emoji:"⛰️" },
-      { id:"amazon", name:"Amazonia",        emoji:"🌿" },
-      { id:"history",name:"History",         emoji:"🏺" },
-      { id:"people", name:"People + Language", emoji:"🗣️" },
-      { id:"food",   name:"Food + Culture",  emoji:"🍽️" }
-    ];
+    // ----- Teaching concept: “Guided journey”
+    // Linear scenes (like walking through Peru west→east and past→present),
+    // each scene has: a hook + 2–3 “cards” (tap to reveal deeper text) + optional prompt + key terms.
 
-    // Each card: prompt + fact + why (tiny meaning)
-    const CARDS = [
-      // Coast
-      { stop:"coast", prompt:"Peru touches which ocean?", fact:"The Pacific Ocean runs along Peru’s western edge.", why:"That coastline shapes food (seafood!), climate, and big cities like Lima." },
-      { stop:"coast", prompt:"What’s a classic way Peru is “split” geographically?", fact:"Peru is often described as three long regions: the arid Coast (Costa), the Andes (Sierra), and the Amazon Basin (Amazonia) to the east.", why:"It’s one reason Peru feels like multiple countries in one.", tag:"3-regions" },
-      { stop:"coast", prompt:"Why can the Peruvian coast feel surprisingly dry?", fact:"Cold ocean currents + desert geography mean many coastal areas are arid, even near the sea.", why:"It’s a coast that can look desert-y—very different from tropical beaches." },
-      { stop:"coast", prompt:"Big city check: what’s Peru’s capital?", fact:"Lima is the capital of Peru.", why:"It’s a coastal capital with serious food culture and history." },
-      { stop:"coast", prompt:"Mind-bender: what are the Nazca Lines?", fact:"Huge geoglyphs scratched into Peru’s coastal desert (Nazca/Palpa area), made roughly between 500 BCE and 500 CE.", why:"They’re one of archaeology’s great mysteries—and are best seen from above." },
-      { stop:"coast", prompt:"Are the Nazca Lines UNESCO-protected?", fact:"Yes—“Lines and Geoglyphs of Nasca and Palpa” are recognized as a UNESCO World Heritage Site.", why:"Because they’re fragile and globally significant." },
+    const LS_KEY = "peru_clickthru_v1";
 
-      // Andes
-      { stop:"andes", prompt:"What mountain range runs through Peru?", fact:"The Andes form Peru’s rugged spine.", why:"Altitude changes everything: weather, crops, towns, travel pace." },
-      { stop:"andes", prompt:"What’s Machu Picchu, in one sentence?", fact:"Machu Picchu is a famous Inca site in the Andes—and a UNESCO World Heritage Site (inscribed 1983).", why:"It’s iconic, but also a living landscape with strict conservation needs." },
-      { stop:"andes", prompt:"High lake flex: what’s special about Lake Titicaca?", fact:"Lake Titicaca is the world’s highest lake navigable to large vessels.", why:"It’s a cultural heartland around the Peru–Bolivia border." },
-      { stop:"andes", prompt:"Why do people talk about “altitude” so much in Peru?", fact:"Many Andean destinations sit very high above sea level, so you can feel breathless faster than you expect.", why:"Good travel move: slower first day + hydrate + easy walking." },
-      { stop:"andes", prompt:"Potato origin story?", fact:"Potatoes were domesticated in the region of modern-day southern Peru and northwestern Bolivia thousands of years ago.", why:"Peru still has mind-blowing potato variety—colors, shapes, flavors." },
-      { stop:"andes", prompt:"What’s ‘chuño’ (bonus word)?", fact:"A traditional Andean method of freeze-drying potatoes using cold nights and sunny days.", why:"It’s an ingenious food-tech adapted to high altitude." },
-
-      // Amazon
-      { stop:"amazon", prompt:"What’s ‘Amazonia’ in the Peru context?", fact:"Peru’s eastern side includes wet, forested Amazon Basin regions.", why:"It’s a huge biodiversity zone—very different from the coast and Andes." },
-      { stop:"amazon", prompt:"Two seasons you’ll often hear about in the rainforest?", fact:"People commonly talk about wetter vs. drier periods (varies by area and year).", why:"It affects wildlife viewing, river levels, and travel routes." },
-      { stop:"amazon", prompt:"What’s a ‘cloud forest’ vibe?", fact:"Where the Andes meet the Amazon, you can get misty, lush cloud forests.", why:"It’s a transition zone—often packed with birds and orchids." },
-      { stop:"amazon", prompt:"Quick animal vibe-check?", fact:"Think: colorful birds, monkeys, river life—plus a ton of insects.", why:"Pack light but smart: breathable layers + repellent." },
-      { stop:"amazon", prompt:"Amazon travel is mostly…", fact:"Rivers + boats + lodge networks (depending on the region).", why:"It’s a different rhythm than road-trip Peru." },
-      { stop:"amazon", prompt:"One practical difference vs. Andes travel?", fact:"Heat + humidity are the main challenge, not altitude.", why:"You’ll plan differently: shade, water, slow pace." },
-
-      // History
-      { stop:"history", prompt:"When was Peru’s independence declared?", fact:"Peru’s independence was declared on July 28, 1821.", why:"That date is central to Peru’s national celebrations." },
-      { stop:"history", prompt:"Who were the Incas (very short)?", fact:"A powerful Andean civilization whose empire centered around Cusco.", why:"Their architecture and roads still shape travel routes today." },
-      { stop:"history", prompt:"What’s a ‘sacred valley’ vibe (tourism term)?", fact:"A region near Cusco with major Inca sites, farming terraces, and river valleys.", why:"It’s often used to acclimate before higher treks." },
-      { stop:"history", prompt:"What’s an easy way to date the Nazca Lines?", fact:"Many were made between 500 BCE and 500 CE.", why:"That’s long before the Inca—Peru has deep layers of civilizations." },
-      { stop:"history", prompt:"Tiny language note that hints at history?", fact:"Quechua spread widely across the Andes before and during Inca times.", why:"You’ll still see Quechua words in place names and daily speech." },
-      { stop:"history", prompt:"Machu Picchu’s UNESCO angle?", fact:"UNESCO inscription helps protect both the archaeological site and its surrounding landscape.", why:"It’s not just ruins—it’s a whole ecosystem and cultural area." },
-
-      // People + language
-      { stop:"people", prompt:"What are Peru’s official languages?", fact:"Spanish is official, and (where they predominate) Quechua, Aymara, and other native tongues are official as well.", why:"Language in Peru is tied to region, identity, and history." },
-      { stop:"people", prompt:"A respectful travel move re: language?", fact:"Learn a few basics: “hola”, “gracias”… and if you’re in the Andes, try a couple Quechua greetings if offered locally.", why:"Even tiny effort reads as respect." },
-      { stop:"people", prompt:"Llama vs alpaca (quick vibe)?", fact:"Both are Andean camelids; alpacas are especially prized for soft fiber.", why:"Textiles are a major cultural and economic thread." },
-      { stop:"people", prompt:"What’s a ‘fiestas’ vibe?", fact:"Many towns have local festivals mixing indigenous and Catholic traditions.", why:"Music, dance, costumes—Peru’s culture is very alive." },
-      { stop:"people", prompt:"What’s a ‘market’ vibe in Peru?", fact:"Markets are often where daily life happens: produce, herbs, textiles, snacks.", why:"Great for learning by wandering (and tasting)." },
-      { stop:"people", prompt:"Peru is best understood as…", fact:"A mosaic: multiple regions, climates, languages, and cultural histories.", why:"That’s the whole ‘passport’ idea." },
-
-      // Food + culture
-      { stop:"food", prompt:"Peru’s most famous “raw fish” dish?", fact:"Ceviche: seafood cured quickly in citrus, often with onion and chili.", why:"It’s a coast-to-table signature." },
-      { stop:"food", prompt:"Why is ceviche often eaten earlier in the day?", fact:"Traditionally, it’s freshest when fish and citrus do their magic fast—many locals treat it like a lunch dish.", why:"Food culture has timing, not just recipes." },
-      { stop:"food", prompt:"What’s ‘aji’?", fact:"A family of Peruvian chilies used for heat + fruitiness (not just burn).", why:"Aji is a flavor backbone across dishes." },
-      { stop:"food", prompt:"Peru is obsessed with… potatoes.", fact:"There are many native varieties, especially from Andean regions.", why:"Different potatoes = different textures and dishes." },
-      { stop:"food", prompt:"A drink you’ll see everywhere?", fact:"Pisco-based drinks are popular—like the pisco sour (often associated with Lima).", why:"It’s a cultural icon (and a delicious one)." },
-      { stop:"food", prompt:"Food identity in one word?", fact:"Biodiversity.", why:"Multiple climates = insane ingredient range (sea, highlands, jungle)." },
-    ];
-
-    // -----------------------------
-    // State + persistence
-    // -----------------------------
-    const LS_KEY = "peruPassport_v1";
-    const state = {
-      stopId: STOPS[0].id,
-      indexByStop: Object.fromEntries(STOPS.map(s => [s.id, 0])),
-      revealed: false,
-      seen: {},     // cardId -> true
-      favorites: {},// cardId -> true
-      stamps: {}    // stopId -> true
+    const SOURCES = {
+      machu: { label:"UNESCO: Historic Sanctuary of Machu Picchu", href:"https://whc.unesco.org/en/list/274/" },
+      nazca: { label:"UNESCO: Lines and Geoglyphs of Nasca and Palpa", href:"https://whc.unesco.org/en/list/700/" },
+      indep: { label:"Britannica: Achievement of independence (Peru)", href:"https://www.britannica.com/place/Peru/Achievement-of-independence" },
+      geo:   { label:"Geography (Costa/Sierra/Selva)", href:"https://en.wikipedia.org/wiki/Geography_of_Peru" }
     };
 
-    function cardId(card){
-      // stable-ish id from content
-      return `${card.stop}::${card.prompt}`.toLowerCase();
+    // Up to 6 optional images (as requested)
+    // Put your files in /images/ with these names, or change paths here:
+    const IMAGES = {
+      machu: "images/machu-picchu.jpg",
+      andes: "images/andes.jpg",
+      amazon:"images/amazon.jpg",
+      lima:  "images/lima.jpg",
+      nazca: "images/nazca.jpg",
+      ceviche:"images/ceviche.jpg"
+    };
+
+    // Scenes: 18 total (6 chapters × 3 scenes). Each scene: title, intro, chunks (tap-to-reveal), prompt, terms, sources, media.
+    const SCENES = [
+      // Chapter 1: The Map
+      mkScene("Map","🗺️","rgba(123,214,164,.92)","geo",null,
+        "Peru makes more sense when you stop thinking “north–south” and start thinking “west–east.”",
+        "Three words unlock the country: Costa (coast), Sierra (Andes), Selva (Amazon). It’s simplified, but it predicts climate, food, languages, and how hard it is to get somewhere.",
+        [
+          chunk("The big idea","Tap More","Costa/Sierra/Selva isn’t trivia. It’s a mental model. If you know which zone you’re in, you can infer: temperature swings, typical crops, transport options, and even what the daily rhythm feels like."),
+          chunk("Why it matters","Tap More","A traveler mistake is thinking Peru is one climate. It isn’t. You can be near the equator and still be cold at night. You can be on the coast and still be in a desert."),
+          chunk("Quick test","Tap More","If a town is in the Sierra: expect altitude, cold nights, steep roads, terrace farming. If it’s in the Selva: expect heat, humidity, rivers as infrastructure.")
+        ],
+        "Connect the dots: Pick one place you’ve heard of (Lima, Cusco, Iquitos). Which zone is it in—and what does that predict about daily life?",
+        [
+          term("Costa","Coastal plain along the Pacific. Often arid; green clusters around river valleys."),
+          term("Sierra","The Andes highlands: altitude, cold nights, steep terrain, big microclimates."),
+          term("Selva","Amazon basin side: heat, humidity, river networks, high biodiversity."),
+          term("Altitude","Less oxygen per breath; affects sleep, stamina, and hydration needs.")
+        ],
+        [SOURCES.geo]
+      ),
+      mkScene("Map","🌊","rgba(255,184,107,.86)","geo",null,
+        "Coast surprise: Peru’s Pacific edge can feel like a desert.",
+        "People expect tropical beaches. Instead, large parts of coastal Peru are dry. Cities and farms often cluster where water is predictable (rivers, aquifers, irrigated valleys).",
+        [
+          chunk("Why the coast can be dry","More","Cold ocean conditions can keep air cool and stable, and the Andes block many weather systems from the east. Result: long arid stretches, punctuated by green river valleys."),
+          chunk("What you notice in real life","More","Green doesn’t always mean rain; it can mean irrigation. You’ll see dense city life next to empty tan hills—because water access drives settlement."),
+          chunk("What this teaches","More","Geography isn’t backdrop; it’s cause. It shapes where people live, what they eat, and what infrastructure becomes politically urgent (especially water).")
+        ],
+        null,
+        [
+          term("River valley","A narrow green corridor cutting through arid land—often where farms and towns concentrate."),
+          term("Irrigation","Moving water to fields; on the coast this can be the difference between desert and agriculture.")
+        ],
+        [SOURCES.geo]
+      ),
+      mkScene("Map","⛰️","rgba(123,214,164,.8)","geo","andes",
+        "The Andes: a wall, and a ladder.",
+        "Mountains block movement (a wall)… but elevation creates stacked ecological zones (a ladder). People historically used different altitudes like a portfolio: potatoes up high, maize lower, tropical goods in foothills.",
+        [
+          chunk("Vertical geography","More","In the Andes, short horizontal distances can cross huge altitude changes. That means different crops, temperatures, and even building styles within a small area."),
+          chunk("Time works differently","More","Two places that look close on a map may take hours to reach. Curves, passes, and altitude change the math. This is a big reason regions can keep distinct identities."),
+          chunk("Empire logic","More","If you’re building a state here, you obsess over roads, storage, and communication. The Inca are famous partly because they built systems that match the mountains.")
+        ],
+        "Connect the dots: Imagine you’re moving goods from coast → highlands. What breaks first: roads, bodies, or supply chain?",
+        [
+          term("Terraces","Stepped farmland that makes slopes productive and controls erosion/water."),
+          term("Microclimate","Local climate shaped by terrain; mountains create many."),
+          term("Pass","A navigable route through mountains; control passes and you control movement.")
+        ],
+        [SOURCES.geo]
+      ),
+
+      // Chapter 2: Lima + Coast
+      mkScene("Lima & Coast","🏙️","rgba(255,184,107,.9)","lima","lima",
+        "Lima: a massive city on the edge of a desert.",
+        "Lima is the capital and the biggest urban magnet. To understand it, don’t start with “city facts.” Start with the coast’s logic: ports, trade, and water constraints.",
+        [
+          chunk("Why Lima is where it is","More","Coastal capitals tend to sit where trade routes converge and where water can support dense settlement. On the Peruvian coast, rivers and engineered water systems matter—a lot."),
+          chunk("What ‘capital’ does","More","Capitals pull people, money, and culture inward. Lima becomes a mixing engine: migration from different regions means the city contains many Perus at once."),
+          chunk("The traveler lesson","More","If you want to learn quickly, visit a market: you’ll literally see the coast–highlands–jungle supply chain on tables.")
+        ],
+        null,
+        [
+          term("Port city","A city tied to shipping/trade. Ports shape economy, migration, and food."),
+          term("Migration","Movement of people; in Peru it strongly affects urban culture and cuisine.")
+        ],
+        [SOURCES.geo]
+      ),
+      mkScene("Lima & Coast","🍋","rgba(123,214,164,.85)","lima","ceviche",
+        "Peruvian food is a geography lesson you can eat.",
+        "The reason Peru’s cuisine feels ‘big’ is because the country is ecologically big: a productive ocean, altitude zones, and an Amazon pantry—then a major city that blends it all.",
+        [
+          chunk("Ceviche = Pacific logic","More","Ceviche is iconic because the coast is iconic. It’s not just a dish; it’s a statement that the sea is central to daily life and national identity."),
+          chunk("Potatoes = Andes logic","More","Highland diversity and resilience show up in potatoes: many varieties, and preservation traditions like chuño (freeze-dried potatoes)."),
+          chunk("Amazon ingredients = river/forest logic","More","Fruits, herbs, and local staples track rainforest ecology and river transport. Menus can be maps if you read them that way.")
+        ],
+        "Connect the dots: When you see a dish, ask: which region supplied the main ingredient, and what environment made it possible?",
+        [
+          term("Ceviche","Raw fish ‘cooked’ in citrus; a coastal emblem."),
+          term("Chuño","Freeze-dried potato method: storage technology for highlands."),
+          term("Biodiversity","Variety of life; shows up directly in ingredients.")
+        ],
+        [SOURCES.geo]
+      ),
+      mkScene("Lima & Coast","🌀","rgba(255,184,107,.8)","nazca","nazca",
+        "Nazca: giant desert drawings from deep time.",
+        "The Lines and Geoglyphs of Nasca and Palpa sit on Peru’s arid coastal plain, far south of Lima. They’re famous because they’re enormous—and because we still debate their full meaning.",
+        [
+          chunk("What they are (mechanically)","More","They were made by clearing or scratching the surface stones to reveal lighter ground beneath. Some lines run for kilometers; figures depict animals, stylized plants, and imaginary beings."),
+          chunk("Why they survived","More","The desert helps preserve them. But “preserved” doesn’t mean “safe”—they’re fragile, and modern impacts can damage them."),
+          chunk("The real teaching point","More","Nazca is a reminder: Peru isn’t just ‘Inca + Spanish.’ There are many deep cultural layers—different regions, different timelines.")
+        ],
+        null,
+        [
+          term("Geoglyph","A large ground figure made by arranging or removing surface material."),
+          term("500 BCE–500 CE","UNESCO’s broad date range for the Nasca/Palpa geoglyph tradition.")
+        ],
+        [SOURCES.nazca]
+      ),
+
+      // Chapter 3: Andes + Inca
+      mkScene("Andes","🫁","rgba(123,214,164,.9)","andes", "andes",
+        "Altitude is physics (not vibes).",
+        "At higher altitude, each breath delivers less oxygen. That changes sleep, stamina, and how fast you feel tired. People acclimate over time—so pacing is part of understanding the Andes.",
+        [
+          chunk("What altitude does to you","More","Lower oxygen pressure can mean headaches and poor sleep at first. It also changes your performance: stairs hit harder, dehydration sneaks up, and alcohol can feel stronger."),
+          chunk("Why locals move differently","More","A slower pace isn’t laziness. It’s adaptation. Bodies and routines sync to altitude and temperature swings."),
+          chunk("Travel strategy (not medical advice)","More","Day one: take it easy, hydrate, and keep meals simple. Let your body catch up before you try to ‘crush it.’")
+        ],
+        "Connect the dots: How would altitude change how an empire moves messengers, armies, and food?",
+        [
+          term("Acclimatization","The body adapting over time to altitude."),
+          term("Microclimate","Temperature/weather can change dramatically with elevation and terrain.")
+        ],
+        [SOURCES.geo]
+      ),
+      mkScene("Andes","🥔","rgba(255,184,107,.78)","andes", null,
+        "Potatoes: a civilization technology.",
+        "Potatoes were domesticated in the region of southern Peru/northwestern Bolivia. In highlands, diversity is risk management: different varieties handle different conditions.",
+        [
+          chunk("Diversity as resilience","More","If climate or pests hit one variety, another might still thrive. That’s a stability strategy built into agriculture."),
+          chunk("Preservation changes everything","More","Techniques like chuño turn harvest into long-lasting stores. Storage is power: it stabilizes communities through lean seasons and shocks."),
+          chunk("Why you should care","More","This is how you learn a place deeply: not ‘what do they eat’ but ‘what problem does this food system solve?’")
+        ],
+        null,
+        [
+          term("Domestication","Humans shaping plants/animals over time for reliable use."),
+          term("Chuño","Freeze-dried potato method; long-term storage in the Andes.")
+        ],
+        [SOURCES.geo]
+      ),
+      mkScene("Andes","🏛️","rgba(123,214,164,.75)","machu","machu",
+        "Machu Picchu is a whole sanctuary, not just a ruin.",
+        "UNESCO recognizes Machu Picchu as a mixed World Heritage property (cultural + natural): monumental Inca architecture embedded in a protected mountain landscape.",
+        [
+          chunk("Why the setting matters","More","The drama isn’t only the stonework. It’s the placement: steep terrain, cloud-forest edges, and a built environment that handles water and slope."),
+          chunk("Engineering mindset","More","Inca building is about fit: stone, gravity, drainage, and movement. It’s architecture that assumes earthquakes and mountains are normal."),
+          chunk("Modern reality","More","Conservation is part of the story now: tourism pressure, erosion, and ecosystem protection are active challenges.")
+        ],
+        null,
+        [
+          term("Mixed World Heritage","UNESCO category for sites with both cultural and natural significance."),
+          term("Sanctuary","Protected region; the landscape is part of what’s being preserved.")
+        ],
+        [SOURCES.machu]
+      ),
+
+      // Chapter 4: Amazonia
+      mkScene("Amazonia","🚤","rgba(255,184,107,.85)","amazon","amazon",
+        "In the jungle, rivers are the highways.",
+        "In many Amazonian areas, rivers connect towns, move goods, and define where people settle. River levels change routes and travel times.",
+        [
+          chunk("Infrastructure without asphalt","More","Where roads are limited, water routes become the network. Schedules and logistics can hinge on rainfall and river height."),
+          chunk("A different map","More","In the Andes you think passes. In the Amazon you think tributaries. That mental switch is a real ‘aha’ for understanding Peru."),
+          chunk("What you notice traveling","More","You’ll see towns oriented toward the river: docks, markets, transport—because the river is the main corridor.")
+        ],
+        "Connect the dots: If your ‘highway’ changes seasonally, how does that change healthcare, schooling, and trade?",
+        [
+          term("Tributary","A smaller river feeding a larger one—key in Amazon networks."),
+          term("Wet/dry cycle","Seasonal shifts in rain and river levels affecting access.")
+        ],
+        [SOURCES.geo]
+      ),
+      mkScene("Amazonia","🌫️","rgba(123,214,164,.75)","amazon", null,
+        "The Andes–Amazon edge: cloud forests and microclimates.",
+        "Where the Andes descend into the Amazon basin you get lush transition zones—often described as cloud forest—with rapid changes in weather over short distances.",
+        [
+          chunk("Why ‘edges’ are rich","More","Ecological edges can concentrate biodiversity because species from multiple zones overlap. Topography creates pockets of distinct conditions."),
+          chunk("Travel implication","More","You can go from cool to humid fast. Layers matter. This is Peru’s geography in miniature: vertical shifts create different worlds."),
+          chunk("Teaching point","More","Biodiversity isn’t random; it’s structured by terrain and climate gradients.")
+        ],
+        null,
+        [
+          term("Cloud forest","Moist, misty transitional forests at mid-elevations."),
+          term("Biodiversity","Variety of species; often extremely high in Amazon-related ecosystems.")
+        ],
+        [SOURCES.geo]
+      ),
+      mkScene("Amazonia","🔥","rgba(255,184,107,.7)","amazon", null,
+        "Different constraints than the Andes: heat and humidity.",
+        "In Amazonia, the hard part is often heat management, hydration, and insects—not altitude. Slow pacing is skill, not weakness.",
+        [
+          chunk("The body lesson","More","Heat makes everything harder: walking, thinking, carrying. Planning around shade and water is practical intelligence."),
+          chunk("The ecosystem lesson","More","You’re in a dense living system. The goal is to experience it without damaging it: stick to trails, minimize waste, respect habitats."),
+          chunk("How to learn deep","More","Ask what the environment demands from people: clothing, transport, housing, daily schedules. That’s culture shaped by ecology.")
+        ],
+        null,
+        [
+          term("Humidity","Water vapor in the air; affects comfort and hydration."),
+          term("Leave No Trace","A set of practices for minimizing impact in natural areas.")
+        ],
+        [SOURCES.geo]
+      ),
+
+      // Chapter 5: History layers
+      mkScene("History layers","⏳","rgba(123,214,164,.8)","history", null,
+        "Peru is a layer cake, not a straight line.",
+        "A useful way to learn: don’t flatten history into one story. Think in layers: pre‑Inca cultures (vary by region), Inca systems, colonial rule, and modern republic.",
+        [
+          chunk("Why layers teach better","More","Layers keep you from calling everything ‘ancient.’ They force you to ask: which group made this, when, and why here?"),
+          chunk("Region matters","More","Different areas have different timelines. Nazca is coastal desert history; Inca is highland imperial history; Amazon histories have their own distinct patterns."),
+          chunk("Your new habit","More","Whenever you’re somewhere: ask ‘what’s the oldest layer here?’ Then ‘what’s the newest layer?’ That’s instant depth.")
+        ],
+        "Connect the dots: How would Peru feel different if it had only one ‘foundational’ civilization instead of many?",
+        [
+          term("Pre‑Inca","Cultures that existed before the Inca period; many across Peru."),
+          term("Colonial","Period of Spanish rule shaping cities, economy, and society.")
+        ],
+        [SOURCES.geo]
+      ),
+      mkScene("History layers","📜","rgba(255,184,107,.78)","history", null,
+        "Independence: a date and a process.",
+        "Peru’s independence was declared on July 28, 1821. But the political‑military reality took longer; key conflict continued until 1824.",
+        [
+          chunk("Why declarations aren’t the whole story","More","A declaration is a symbolic break. But if opposing forces still control territory, independence is incomplete in practice."),
+          chunk("Why Peru’s path was hard","More","Britannica notes that even after the 1821 declaration, Spanish forces remained strong in the interior until later victories helped secure independence."),
+          chunk("Teaching point","More","National holidays commemorate symbols. Understanding the process gives you a more honest sense of how states are born.")
+        ],
+        null,
+        [
+          term("July 28, 1821","Independence declared in Lima; a core national commemorative date."),
+          term("1824","Year of decisive events that helped ensure independence.")
+        ],
+        [SOURCES.indep]
+      ),
+      mkScene("History layers","🌀","rgba(123,214,164,.7)","nazca","nazca",
+        "Nazca again — because it rewires your timeline.",
+        "It’s worth repeating: UNESCO dates the Nasca/Palpa geoglyph tradition roughly 500 BCE–500 CE. That’s centuries of continuity long before the Inca.",
+        [
+          chunk("What that implies","More","Long‑duration projects suggest social organization: shared meaning, repeated practice, knowledge transmission. Whether ritual, processional paths, or something else—this was not casual doodling."),
+          chunk("How to visit it mentally","More","Instead of hunting one ‘answer,’ notice: scale, materials, landscape, and what kind of society could maintain this tradition."),
+          chunk("Your learning upgrade","More","When you see ‘mystery site,’ ask: what does it reveal about labor, coordination, and belief?")
+        ],
+        null,
+        [
+          term("Continuity","A practice repeated over long time spans; implies stable cultural transmission."),
+          term("Landscape-scale art","Art made at the scale of terrain, meant to be experienced across space.")
+        ],
+        [SOURCES.nazca]
+      ),
+
+      // Chapter 6: People & culture
+      mkScene("People & culture","🗣️","rgba(255,184,107,.85)","culture", null,
+        "Language is geography you can hear.",
+        "Spanish is dominant nationally, and Quechua and Aymara (among others) are deeply tied to region and identity. Even if you only speak Spanish, noticing indigenous language presence changes how you read place names and signs.",
+        [
+          chunk("Why it matters","More","Language is a map of history: migration, state policy, and local identity show up in what people speak at home vs in public."),
+          chunk("A respectful traveler move","More","You don’t need to perform. You can ask, listen, and learn a couple useful phrases when appropriate. Curiosity without spectacle is the vibe."),
+          chunk("Teaching point","More","The ‘same country’ can have different linguistic realities region to region. That’s a major part of Peru’s cultural depth.")
+        ],
+        "Connect the dots: How would your sense of ‘home’ change if your public language and family language differed?",
+        [
+          term("Quechua","A family of indigenous languages widely associated with the Andes."),
+          term("Aymara","An indigenous language especially associated with the southern highlands near Lake Titicaca.")
+        ],
+        []
+      ),
+      mkScene("People & culture","🛒","rgba(123,214,164,.78)","culture", null,
+        "Markets are the fastest teacher.",
+        "If you want speed‑learning, go to a market. You’ll see ingredients, textiles, daily tools, and regional specialties in one place—plus the social rhythm of bargaining, chatting, and eating.",
+        [
+          chunk("What to look for","More","Ask where an ingredient came from: coast, highlands, jungle. That single question turns shopping into geography."),
+          chunk("Why markets are cultural hubs","More","Markets are not just ‘commerce.’ They’re where daily life happens: gossip, food, medicine herbs, seasonal shifts, celebrations."),
+          chunk("Your one‑question method","More","Pick one stall and ask: where is this from, who buys it, and what’s it used for? That’s depth in 3 minutes.")
+        ],
+        null,
+        [
+          term("Supply chain","How goods move from origin to consumer—markets expose it."),
+          term("Seasonality","What’s available changes with weather and harvest cycles.")
+        ],
+        []
+      ),
+      mkScene("People & culture","🧭","rgba(255,184,107,.7)","culture", null,
+        "How to learn deep in-country (without being weird).",
+        "One anchor topic per day. Investigate it: origin, function, meaning. This turns your trip into an intentional learning loop.",
+        [
+          chunk("Anchor topic examples","More","A textile pattern. A potato variety. A river transport route. A ceviche style. A festival dance. One thing—deep."),
+          chunk("Your three questions","More","1) Where did it come from? 2) What problem does it solve? 3) What does it mean to locals?"),
+          chunk("Why this works","More","It keeps you from collecting trivia. You’re building mental models—how environment, history, and culture co-produce daily life.")
+        ],
+        "Final prompt: What’s your first anchor topic going to be if you land in Peru tomorrow?",
+        [
+          term("Mental model","A simple structure that helps you predict how a system behaves."),
+          term("Context","The surrounding conditions that give something its meaning (place, history, need).")
+        ],
+        []
+      )
+    ];
+
+    function mkScene(chapter, emoji, dot, srcKey, mediaKey, title, intro, chunks, prompt, terms, sources){
+      return { chapter, emoji, dot, srcKey, mediaKey, title, intro, chunks, prompt, terms, sources };
     }
+    function chunk(head, cta, revealText){
+      return { head, cta, revealText };
+    }
+    function term(t, d){ return { t, d }; }
+
+    const state = {
+      idx: 0,
+      learned: {}, // idx -> true
+    };
+
+    const $ = s => document.querySelector(s);
 
     function load(){
       try{
         const saved = JSON.parse(localStorage.getItem(LS_KEY));
         if(saved && typeof saved === "object"){
-          Object.assign(state, saved);
+          state.idx = clamp(saved.idx ?? 0, 0, SCENES.length-1);
+          state.learned = saved.learned || {};
         }
       }catch(e){}
+      $("#deepTotal").textContent = String(SCENES.length);
     }
     function save(){
       localStorage.setItem(LS_KEY, JSON.stringify(state));
     }
-
-    // -----------------------------
-    // Helpers
-    // -----------------------------
-    const $ = sel => document.querySelector(sel);
-    const tabsEl = document.querySelector(".tabs");
-
-    function stopCards(stopId){
-      return CARDS.filter(c => c.stop === stopId);
+    function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+    function esc(s){
+      return String(s)
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
 
-    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+    function render(){
+      const scene = SCENES[state.idx];
 
-    function toast(msg){
-      const t = $("#toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      clearTimeout(toast._tm);
-      toast._tm = setTimeout(()=> t.classList.remove("show"), 1200);
-    }
+      // Top meta
+      $("#sceneSub").textContent = `Scene ${state.idx+1} of ${SCENES.length}`;
+      $("#chapterMini").textContent = `Chapter: ${scene.chapter}`;
 
-    // -----------------------------
-    // UI: Tabs
-    // -----------------------------
-    function renderTabs(){
-      tabsEl.innerHTML = "";
-      STOPS.forEach(s => {
-        const btn = document.createElement("button");
-        btn.className = "tabBtn";
-        btn.type = "button";
-        btn.role = "tab";
-        btn.setAttribute("aria-selected", s.id === state.stopId ? "true" : "false");
-        btn.textContent = `${s.emoji} ${s.name}`;
-        btn.addEventListener("click", () => {
-          state.stopId = s.id;
-          state.revealed = false;
-          save();
-          renderTabs();
-          renderCard();
-          renderSidebar();
-        });
-        tabsEl.appendChild(btn);
-      });
-    }
-
-    // -----------------------------
-    // UI: Card
-    // -----------------------------
-    function currentIndex(){
-      const list = stopCards(state.stopId);
-      const i = state.indexByStop[state.stopId] ?? 0;
-      return clamp(i, 0, Math.max(0, list.length - 1));
-    }
-
-    function setIndex(i){
-      const list = stopCards(state.stopId);
-      state.indexByStop[state.stopId] = clamp(i, 0, Math.max(0, list.length - 1));
-      save();
-    }
-
-    function seenCountForStop(stopId){
-      const list = stopCards(stopId);
-      let c = 0;
-      for(const card of list){
-        if(state.seen[cardId(card)]) c++;
-      }
-      return c;
-    }
-
-    function maybeAwardStamp(stopId){
-      const list = stopCards(stopId);
-      if(list.length === 0) return;
-
-      const allSeen = list.every(card => !!state.seen[cardId(card)]);
-      if(allSeen && !state.stamps[stopId]){
-        state.stamps[stopId] = true;
-        toast("🛂 Stamp earned!");
-        save();
-      }
-    }
-
-    function renderProgress(){
-      const list = stopCards(state.stopId);
-      const total = Math.max(1, list.length);
-      const idx = currentIndex();
-      const seen = seenCountForStop(state.stopId);
-      $("#posLabel").textContent = String(idx + 1);
-      $("#totalLabel").textContent = String(total);
-      $("#seenLabel").textContent = String(seen);
-
-      const pct = Math.round((seen / total) * 100);
+      // Progress
+      const pct = Math.round(((state.idx) / (SCENES.length-1)) * 100);
       $("#barFill").style.width = pct + "%";
 
-      $("#favCount").textContent = String(Object.keys(state.favorites).length);
-      $("#stampCount").textContent = String(Object.keys(state.stamps).length);
-    }
+      // Tag
+      $("#sceneTagText").textContent = scene.chapter;
+      const dot = $("#sceneDot");
+      dot.style.background = scene.dot || "rgba(123,214,164,.92)";
+      dot.style.boxShadow = scene.dot?.includes("255,184,107") ? "0 0 0 6px rgba(255,184,107,.12)" : "0 0 0 6px rgba(123,214,164,.12)";
 
-    function renderStarButton(id){
-      const isFav = !!state.favorites[id];
-      const btn = $("#btnStar");
-      btn.setAttribute("aria-pressed", isFav ? "true" : "false");
-      btn.querySelector("span[aria-hidden]").textContent = isFav ? "★" : "☆";
-      btn.title = isFav ? "Unstar this card" : "Star this card";
-    }
+      // Media
+      const imgEl = $("#sceneImg");
+      const fallback = $("#emojiFallback");
+      fallback.textContent = scene.emoji || "🇵🇪";
+      const mediaSrc = scene.mediaKey ? IMAGES[scene.mediaKey] : null;
 
-    function renderCard(){
-      const list = stopCards(state.stopId);
-      const idx = currentIndex();
-      const card = list[idx] || { stop: state.stopId, prompt:"No cards here yet.", fact:"", why:"" };
-      const id = cardId(card);
-
-      const stopMeta = STOPS.find(s => s.id === state.stopId);
-      $("#catLabel").textContent = `${stopMeta ? stopMeta.name : state.stopId}`;
-      // Change dot color subtly per stop
-      const dot = $("#catDot");
-      const palette = {
-        coast: "rgba(123,214,164,.9)",
-        andes: "rgba(255,184,107,.9)",
-        amazon: "rgba(123,214,164,.75)",
-        history: "rgba(255,184,107,.75)",
-        people: "rgba(123,214,164,.6)",
-        food: "rgba(255,184,107,.6)"
-      };
-      dot.style.background = palette[state.stopId] || "rgba(123,214,164,.9)";
-      dot.style.boxShadow = `0 0 0 6px ${palette[state.stopId]?.replace("0.9","0.12").replace("0.75","0.10").replace("0.6","0.08") || "rgba(123,214,164,.12)"}`;
-
-      $("#prompt").textContent = card.prompt;
-      $("#fact").textContent = card.fact;
-      $("#why").textContent = card.why;
-
-      // Reveal state
-      const reveal = $("#reveal");
-      reveal.classList.toggle("hidden", !state.revealed);
-
-      // Hint line
-      const seen = !!state.seen[id];
-      $("#hint").textContent = state.revealed
-        ? (seen ? "Nice. Double-tap again to unmark “seen”." : "Double-tap to mark “seen”.")
-        : (seen ? "Seen ✓ — tap to reveal again." : "Tap to reveal.");
-
-      renderStarButton(id);
-      renderProgress();
-      renderSidebar();
-    }
-
-    // -----------------------------
-    // Sidebar: Favorites list
-    // -----------------------------
-    function renderSidebar(){
-      const favIds = Object.keys(state.favorites);
-      const favEl = $("#favList");
-
-      if(favIds.length === 0){
-        favEl.textContent = "Star cards to save them here.";
-        return;
-      }
-
-      // Build a tiny list of prompts
-      const items = [];
-      for(const c of CARDS){
-        const id = cardId(c);
-        if(state.favorites[id]){
-          const stopName = (STOPS.find(s => s.id === c.stop)?.name) || c.stop;
-          items.push(`• ${c.prompt} (${stopName})`);
-        }
-      }
-
-      favEl.textContent = items.slice(0, 10).join("\n") + (items.length > 10 ? `\n… +${items.length - 10} more` : "");
-      favEl.style.whiteSpace = "pre-line";
-    }
-
-    // -----------------------------
-    // Interactions
-    // -----------------------------
-    let lastTapTime = 0;
-
-    function toggleReveal(){
-      state.revealed = !state.revealed;
-      save();
-      renderCard();
-    }
-
-    function toggleSeenForCurrent(){
-      const list = stopCards(state.stopId);
-      const card = list[currentIndex()];
-      if(!card) return;
-      const id = cardId(card);
-
-      state.seen[id] = !state.seen[id];
-      save();
-      if(state.seen[id]) toast("Seen ✓");
-      else toast("Unseen");
-      maybeAwardStamp(state.stopId);
-      renderCard();
-    }
-
-    function next(){
-      setIndex(currentIndex() + 1);
-      state.revealed = false;
-      save();
-      renderCard();
-    }
-    function prev(){
-      setIndex(currentIndex() - 1);
-      state.revealed = false;
-      save();
-      renderCard();
-    }
-
-    $("#btnNext").addEventListener("click", next);
-    $("#btnPrev").addEventListener("click", prev);
-
-    // Tap area: single tap toggles reveal, double tap toggles seen
-    const tapArea = $("#cardTapArea");
-    tapArea.addEventListener("click", () => {
-      const now = Date.now();
-      if(now - lastTapTime < 320){
-        toggleSeenForCurrent();
-        lastTapTime = 0;
+      if(mediaSrc){
+        imgEl.src = mediaSrc;
+        imgEl.alt = scene.mediaKey + " image";
+        imgEl.style.display = "block";
+        fallback.style.display = "none";
+        // if missing, onerror will switch:
+        imgEl.onerror = () => {
+          imgEl.style.display = "none";
+          fallback.style.display = "block";
+        };
       }else{
-        toggleReveal();
-        lastTapTime = now;
-      }
-    });
-    tapArea.addEventListener("keydown", (e) => {
-      if(e.key === "Enter" || e.key === " "){
-        e.preventDefault();
-        toggleReveal();
-      }
-    });
-
-    // Star
-    $("#btnStar").addEventListener("click", (e) => {
-      e.stopPropagation();
-      const list = stopCards(state.stopId);
-      const card = list[currentIndex()];
-      if(!card) return;
-      const id = cardId(card);
-      state.favorites[id] = !state.favorites[id];
-      save();
-      toast(state.favorites[id] ? "⭐ Saved" : "Removed");
-      renderCard();
-    });
-
-    // Shuffle stop
-    $("#btnShuffle").addEventListener("click", () => {
-      // Shuffle cards within stop by permuting CARDS in-place (only for that stop).
-      // (Cute hack: stable across reloads only if you keep it open; ok for learning.)
-      const stop = state.stopId;
-      const idxs = [];
-      for(let i=0;i<CARDS.length;i++){
-        if(CARDS[i].stop === stop) idxs.push(i);
-      }
-      for(let i=idxs.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        const a = idxs[i], b = idxs[j];
-        const tmp = CARDS[a]; CARDS[a] = CARDS[b]; CARDS[b] = tmp;
-      }
-      state.revealed = false;
-      setIndex(0);
-      toast("Shuffled");
-      renderCard();
-    });
-
-    // Random card
-    $("#btnRandom").addEventListener("click", () => {
-      const list = stopCards(state.stopId);
-      if(list.length === 0) return;
-      const i = Math.floor(Math.random()*list.length);
-      setIndex(i);
-      state.revealed = false;
-      save();
-      renderCard();
-    });
-
-    // Reset
-    $("#btnReset").addEventListener("click", () => {
-      if(!confirm("Reset local progress (seen, favorites, stamps)?")) return;
-      localStorage.removeItem(LS_KEY);
-      location.reload();
-    });
-
-    // -----------------------------
-    // Quiz
-    // -----------------------------
-    const modal = $("#modalOverlay");
-    let quiz = null;
-
-    function openQuiz(){
-      const list = stopCards(state.stopId);
-      if(list.length < 4){
-        toast("Need at least 4 cards to quiz.");
-        return;
-      }
-      quiz = {
-        stopId: state.stopId,
-        pool: list.slice(),
-        score: 0,
-        asked: 0,
-        total: Math.min(6, list.length) // quick
-      };
-      modal.classList.add("show");
-      nextQuestion();
-    }
-
-    function closeQuiz(){
-      modal.classList.remove("show");
-      quiz = null;
-    }
-
-    function pickDistinct(arr, n){
-      const copy = arr.slice();
-      const out = [];
-      while(out.length < n && copy.length){
-        const i = Math.floor(Math.random()*copy.length);
-        out.push(copy.splice(i,1)[0]);
-      }
-      return out;
-    }
-
-    function nextQuestion(){
-      if(!quiz) return;
-
-      if(quiz.asked >= quiz.total){
-        $("#quizMeta").textContent = "Done!";
-        $("#quizQ").textContent = `Final score: ${quiz.score}/${quiz.total} 🎉`;
-        $("#quizChoices").innerHTML = "";
-        $("#btnNextQ").textContent = "Close";
-        $("#quizScore").textContent = String(quiz.score);
-        $("#quizTotal").textContent = String(quiz.total);
-        return;
+        imgEl.style.display = "none";
+        fallback.style.display = "block";
       }
 
-      $("#btnNextQ").textContent = "Next question →";
+      // Title + intro
+      $("#sceneTitle").textContent = scene.title;
+      $("#sceneIntro").textContent = scene.intro;
 
-      // Question: show prompt, choose correct fact among 4
-      const list = stopCards(quiz.stopId);
-      const target = list[Math.floor(Math.random()*list.length)];
-      const correct = target.fact;
-
-      const distractors = pickDistinct(
-        list.filter(c => c.fact !== correct).map(c => c.fact),
-        3
-      );
-      const choices = [correct, ...distractors].sort(()=> Math.random() - 0.5);
-
-      quiz.current = { target, correct, choices, locked:false };
-      quiz.asked++;
-
-      $("#quizMeta").textContent = `${STOPS.find(s=>s.id===quiz.stopId)?.name || quiz.stopId} • Question ${quiz.asked}/${quiz.total}`;
-      $("#quizQ").textContent = `Which fact matches: “${target.prompt}”`;
-      $("#quizScore").textContent = String(quiz.score);
-      $("#quizTotal").textContent = String(quiz.total);
-
-      const choicesEl = $("#quizChoices");
-      choicesEl.innerHTML = "";
-      choices.forEach(txt => {
-        const b = document.createElement("button");
-        b.className = "choice";
-        b.type = "button";
-        b.textContent = txt;
-        b.addEventListener("click", () => {
-          if(quiz.current.locked) return;
-          quiz.current.locked = true;
-
-          const isCorrect = (txt === quiz.current.correct);
-          if(isCorrect){
-            b.classList.add("correct");
-            quiz.score++;
-            $("#quizScore").textContent = String(quiz.score);
-            toast("✅ Correct");
-          }else{
-            b.classList.add("wrong");
-            // mark the correct one
-            [...choicesEl.querySelectorAll(".choice")].forEach(el => {
-              if(el.textContent === quiz.current.correct) el.classList.add("correct");
-            });
-            toast("❌ Not quite");
-          }
-        });
-        choicesEl.appendChild(b);
+      // Chunks
+      const chunksEl = $("#chunks");
+      chunksEl.innerHTML = "";
+      scene.chunks.forEach((c, i) => {
+        const div = document.createElement("div");
+        div.className = "chunk";
+        div.innerHTML = `
+          <div class="chunkHead">
+            <strong>${esc(c.head)}</strong>
+            <span class="chip" data-i="${i}" aria-expanded="false">${esc(c.cta)}</span>
+          </div>
+          <div class="reveal" id="rev_${i}">${esc(c.revealText)}</div>
+        `;
+        chunksEl.appendChild(div);
       });
+      chunksEl.querySelectorAll(".chip").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = btn.getAttribute("data-i");
+          const rev = document.getElementById("rev_" + i);
+          const open = rev.classList.contains("show");
+          rev.classList.toggle("show", !open);
+          btn.textContent = open ? SCENES[state.idx].chunks[i].cta : "Hide";
+          btn.setAttribute("aria-expanded", String(!open));
+        });
+      });
+
+      // Prompt
+      const promptBox = $("#promptBox");
+      if(scene.prompt){
+        promptBox.style.display = "block";
+        promptBox.innerHTML = `<strong>Connect‑the‑dots:</strong> ${esc(scene.prompt)}`;
+      }else{
+        promptBox.style.display = "none";
+      }
+
+      // Terms
+      const termsBox = $("#termsBox");
+      const termRow = $("#termRow");
+      const termDef = $("#termDef");
+      termRow.innerHTML = "";
+      termDef.classList.remove("show");
+      termDef.textContent = "";
+
+      if(scene.terms && scene.terms.length){
+        termsBox.style.display = "block";
+        scene.terms.forEach((t, i) => {
+          const b = document.createElement("button");
+          b.className = "termBtn";
+          b.type = "button";
+          b.textContent = t.t;
+          b.setAttribute("aria-expanded", "false");
+          b.addEventListener("click", () => {
+            const expanded = b.getAttribute("aria-expanded") === "true";
+            termRow.querySelectorAll(".termBtn").forEach(x => x.setAttribute("aria-expanded","false"));
+            if(expanded){
+              termDef.classList.remove("show");
+              termDef.textContent = "";
+              b.setAttribute("aria-expanded","false");
+            }else{
+              b.setAttribute("aria-expanded","true");
+              termDef.innerHTML = `<strong>${esc(t.t)}:</strong> ${esc(t.d)}`;
+              termDef.classList.add("show");
+            }
+          });
+          termRow.appendChild(b);
+        });
+      }else{
+        termsBox.style.display = "none";
+      }
+
+      // Sources
+      const sLine = $("#sourcesLine");
+      if(scene.sources && scene.sources.length){
+        sLine.style.display = "block";
+        sLine.innerHTML = `Sources: ${scene.sources.map(s => `<a href="${s.href}" target="_blank" rel="noopener noreferrer">${esc(s.label)}</a>`).join(" • ")}`;
+      }else{
+        sLine.style.display = "none";
+      }
+
+      // Learned marker
+      const learned = !!state.learned[state.idx];
+      $("#btnMark").textContent = learned ? "✓ Learned (undo)" : "Mark learned";
+
+      // Meta counts
+      $("#deepCount").textContent = String(Object.keys(state.learned).filter(k => state.learned[k]).length);
+
+      // Buttons
+      $("#btnBack").disabled = state.idx === 0;
+      $("#btnNext").disabled = state.idx === SCENES.length-1;
     }
 
-    $("#btnQuiz").addEventListener("click", openQuiz);
-    $("#btnCloseQuiz").addEventListener("click", closeQuiz);
-    $("#btnNextQ").addEventListener("click", () => {
-      if(!quiz) return;
-      if($("#btnNextQ").textContent === "Close"){ closeQuiz(); return; }
-      nextQuestion();
+    function go(delta){
+      state.idx = clamp(state.idx + delta, 0, SCENES.length-1);
+      save();
+      render();
+    }
+
+    // Nav buttons
+    $("#btnBack").addEventListener("click", () => go(-1));
+    $("#btnNext").addEventListener("click", () => go(1));
+    $("#btnRestart").addEventListener("click", () => {
+      if(!confirm("Restart from Scene 1?")) return;
+      state.idx = 0;
+      save();
+      render();
+    });
+    $("#btnMark").addEventListener("click", () => {
+      state.learned[state.idx] = !state.learned[state.idx];
+      save();
+      render();
     });
 
-    // close when tapping outside modal
-    modal.addEventListener("click", (e) => {
-      if(e.target === modal) closeQuiz();
+    // Help sheet
+    const sheetBack = $("#sheetBack");
+    const openSheet = () => sheetBack.classList.add("show");
+    const closeSheet = () => sheetBack.classList.remove("show");
+    $("#btnHelp").addEventListener("click", openSheet);
+    $("#btnCloseSheet").addEventListener("click", closeSheet);
+    sheetBack.addEventListener("click", (e) => { if(e.target === sheetBack) closeSheet(); });
+
+    // Keyboard arrows
+    window.addEventListener("keydown", (e) => {
+      if(sheetBack.classList.contains("show")) return;
+      if(e.key === "ArrowRight") go(1);
+      if(e.key === "ArrowLeft") go(-1);
     });
 
-    // -----------------------------
+    // Swipe (mobile)
+    let touchX = null, touchY = null;
+    const threshold = 40;
+    document.getElementById("card").addEventListener("touchstart", (e) => {
+      const t = e.changedTouches[0];
+      touchX = t.clientX;
+      touchY = t.clientY;
+    }, {passive:true});
+    document.getElementById("card").addEventListener("touchend", (e) => {
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchX;
+      const dy = t.clientY - touchY;
+      touchX = null; touchY = null;
+      if(Math.abs(dx) < threshold || Math.abs(dx) < Math.abs(dy)) return;
+      if(dx < 0) go(1); else go(-1);
+    }, {passive:true});
+
     // Init
-    // -----------------------------
     load();
-    renderTabs();
-    renderCard();
+    render();
   </script>
+
+  <!--
+    OPTIONAL IMAGE FILENAMES (max 6):
+      images/machu-picchu.jpg
+      images/andes.jpg
+      images/amazon.jpg
+      images/lima.jpg
+      images/nazca.jpg
+      images/ceviche.jpg
+  -->
 </body>
 </html>

@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Peru Deep Dive — interactive mini-course</title>
+  <style>
+    :root{
+      --bg:#0f1412;
+      --text:#e7efe9;
+      --muted:#b8c6be;
+      --faint:#7f8f86;
+      --stroke:rgba(255,255,255,.10);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --max: 980px;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(900px 600px at 10% -10%, rgba(123,214,164,.18), transparent 60%),
+        radial-gradient(900px 600px at 110% 10%, rgba(255,184,107,.15), transparent 55%),
+        radial-gradient(900px 600px at 50% 120%, rgba(123,214,164,.10), transparent 60%),
+        #0f1412;
+      color:var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a{ color: inherit; }
+    button, input, textarea { font: inherit; }
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 18px 14px 28px; }
+    header{ display:flex; gap:12px; align-items:flex-start; justify-content:space-between; margin: 4px 0 14px; }
+    .brand{ display:flex; gap:12px; align-items:center; }
+    .logo{
+      width:44px; height:44px; border-radius: 14px;
+      background: linear-gradient(145deg, rgba(123,214,164,.25), rgba(255,184,107,.18)), rgba(255,255,255,.06);
+      border:1px solid var(--stroke); box-shadow: var(--shadow);
+      display:grid; place-items:center; flex:0 0 auto;
+    }
+    .logo span{ font-size:22px; filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); }
+    .title h1{ font-size: 18px; margin:0; letter-spacing: .2px; line-height: 1.15; }
+    .title p{ margin:4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.35; max-width: 52ch; }
+    .topActions{ display:flex; gap:10px; align-items:center; justify-content:flex-end; flex-wrap:wrap; }
+    .pill{
+      display:flex; gap:8px; align-items:center;
+      padding: 10px 12px; border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      color: var(--muted); font-size: 13px; user-select:none; white-space:nowrap;
+    }
+    .pill strong{ color: var(--text); font-weight:700; }
+
+    .grid{ display:grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 900px){ .grid{ grid-template-columns: 1.2fr .8fr; align-items:start; } }
+
+    .panel{
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panelHead{
+      padding: 12px 12px 10px;
+      border-bottom: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+      display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    }
+    .tabs{ display:flex; gap:8px; flex-wrap:wrap; }
+    .tabBtn{
+      min-height: 40px; padding: 8px 10px; border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.15);
+      color: var(--muted);
+      cursor:pointer;
+      transition: transform .08s ease, background .15s ease, color .15s ease;
+      user-select:none;
+    }
+    .tabBtn:active{ transform: scale(.98); }
+    .tabBtn[aria-selected="true"]{
+      background: rgba(123,214,164,.16);
+      border-color: rgba(123,214,164,.35);
+      color: var(--text);
+    }
+    .btn{
+      min-height: 40px; padding: 9px 12px; border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor:pointer;
+      transition: transform .08s ease, background .15s ease;
+      user-select:none;
+    }
+    .btn:active{ transform: scale(.98); }
+    .btn.primary{ background: rgba(255,184,107,.16); border-color: rgba(255,184,107,.35); }
+    .btn.ghost{ background: rgba(0,0,0,.10); color: var(--muted); }
+
+    .row{ display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+
+    .progressRow{
+      padding: 10px 12px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    }
+    .bar{
+      height:10px; background: rgba(255,255,255,.06);
+      border: 1px solid var(--stroke);
+      border-radius: 999px; overflow:hidden;
+      flex:1; min-width: 160px;
+    }
+    .bar > div{
+      height:100%; width:0%;
+      background: linear-gradient(90deg, rgba(123,214,164,.9), rgba(255,184,107,.85));
+      border-radius: 999px;
+      transition: width .25s ease;
+    }
+    .progressMeta{ color: var(--muted); font-size: 13px; white-space:nowrap; }
+
+    .content{ padding: 12px; display:grid; gap:12px; }
+
+    .hero{
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.06));
+      overflow:hidden;
+    }
+    .heroInner{ padding: 12px; display:grid; gap:10px; }
+    .heroTop{ display:flex; gap:10px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; }
+
+    .badge{
+      display:inline-flex; gap:8px; align-items:center;
+      padding: 6px 10px; border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .dot{
+      width:10px; height:10px;
+      border-radius:999px;
+      background: rgba(123,214,164,.9);
+      box-shadow: 0 0 0 6px rgba(123,214,164,.12);
+      flex:0 0 auto;
+    }
+    .hero h2{ margin:0; font-size: 16px; letter-spacing:.2px; }
+    .hero p{ margin:0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+    .callout{
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px dashed rgba(255,255,255,.18);
+      background: rgba(0,0,0,.12);
+      color: var(--muted);
+    }
+
+    .accordion{
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      overflow:hidden;
+    }
+    details{ border-top: 1px solid var(--stroke); }
+    details:first-child{ border-top:none; }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 12px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      justify-content:space-between;
+      user-select:none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .sumLeft{ display:flex; gap:10px; align-items:flex-start; }
+    .num{
+      width:28px; height:28px; border-radius: 10px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      display:grid; place-items:center;
+      color: var(--muted); font-size: 12px;
+      flex:0 0 auto;
+      margin-top: 1px;
+    }
+    .sumTitle{ display:grid; gap:2px; }
+    .sumTitle strong{ font-size: 14px; letter-spacing:.2px; }
+    .sumTitle span{ color: var(--muted); font-size: 12px; line-height:1.35; }
+    .chev{ color: var(--faint); font-size: 14px; padding-top: 3px; }
+
+    .lesson{
+      padding: 0 12px 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      display:grid;
+      gap:10px;
+    }
+    .lesson strong{ color: var(--text); }
+    .list{ margin:0; padding-left: 18px; display:grid; gap:6px; }
+
+    .termBar{ display:flex; flex-wrap:wrap; gap:8px; }
+    .term{
+      border-radius: 999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      padding: 8px 10px;
+      cursor:pointer;
+      user-select:none;
+      min-height: 38px;
+    }
+    .term[aria-expanded="true"]{
+      background: rgba(123,214,164,.14);
+      border-color: rgba(123,214,164,.35);
+      color: var(--text);
+    }
+    .termDef{
+      display:none;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      color: var(--muted);
+    }
+    .termDef.show{ display:block; }
+
+    .sideBody{ padding: 12px; display:grid; gap:12px; }
+    .mini{
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+    }
+    .mini h3{ margin:0 0 6px; font-size: 14px; letter-spacing:.2px; }
+    .mini p{ margin:0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+    .imgGrid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .ph{
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background:
+        radial-gradient(70% 70% at 30% 25%, rgba(123,214,164,.22), transparent 60%),
+        radial-gradient(70% 70% at 70% 75%, rgba(255,184,107,.18), transparent 60%),
+        rgba(255,255,255,.04);
+      display:grid; place-items:center;
+      overflow:hidden; position:relative;
+    }
+    .ph img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .ph .label{
+      position:absolute;
+      inset:auto 8px 8px 8px;
+      padding: 6px 8px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.40);
+      border:1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.92);
+      font-size: 11px;
+      line-height:1.2;
+      backdrop-filter: blur(6px);
+    }
+    .ph .emoji{ font-size: 22px; opacity:.9; }
+    .tiny{ font-size:12px; color: var(--faint); line-height:1.4; }
+    code{ color: rgba(255,255,255,.9); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><span>🇵🇪</span></div>
+        <div class="title">
+          <h1>Peru Deep Dive</h1>
+          <p>Six chapters, each with real depth: narrative + key ideas + “why it matters.” Tap terms to reveal definitions. Progress saves locally.</p>
+        </div>
+      </div>
+      <div class="topActions">
+        <div class="pill">✅ <strong id="doneCount">0</strong>/<span id="lessonCount">0</span> <span>lessons done</span></div>
+        <div class="pill">🛂 <strong id="chapterCount">0</strong>/<span id="chapterTotal">6</span> <span>chapters stamped</span></div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="panel" aria-label="Course">
+        <div class="panelHead">
+          <div class="tabs" role="tablist" aria-label="Chapters"></div>
+          <div class="row">
+            <button class="btn ghost" id="btnOpenAll">Open all</button>
+            <button class="btn ghost" id="btnCloseAll">Close all</button>
+            <button class="btn primary" id="btnReset">Reset</button>
+          </div>
+        </div>
+
+        <div class="progressRow">
+          <div class="bar"><div id="barFill"></div></div>
+          <div class="progressMeta"><span id="chapterLabel">Chapter</span> • <span id="progressLabel">0%</span></div>
+        </div>
+
+        <div class="content">
+          <div class="hero">
+            <div class="heroInner">
+              <div class="heroTop">
+                <div class="badge"><span class="dot" id="chapterDot"></span><span id="chapterName">…</span></div>
+                <button class="btn ghost" id="btnMarkChapter">Mark chapter complete</button>
+              </div>
+              <h2 id="chapterHook">…</h2>
+              <p id="chapterIntro">…</p>
+              <div class="callout"><strong>Connect-the-dots prompt:</strong> <span id="chapterPrompt">…</span></div>
+
+              <div>
+                <div class="tiny" style="margin-bottom:8px;">Key terms (tap):</div>
+                <div class="termBar" id="termBar"></div>
+                <div class="termDef" id="termDef"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion" id="lessonAccordion"></div>
+
+          <div class="mini">
+            <h3>Sources (links)</h3>
+            <p class="tiny" id="sourceLinks"></p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel" aria-label="Extras">
+        <div class="panelHead">
+          <div class="badge"><span class="dot" style="background:rgba(255,184,107,.9); box-shadow:0 0 0 6px rgba(255,184,107,.12)"></span> Images + Notes</div>
+        </div>
+        <div class="sideBody">
+          <div class="mini">
+            <h3>Images (max 6)</h3>
+            <p style="margin-bottom:10px;">Optional: put images in <code>images/</code> with these filenames (or edit the <code>src</code> paths).</p>
+            <div class="imgGrid">
+              <div class="ph">
+                <img src="images/machu-picchu.jpg" alt="Machu Picchu (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">🏛️</div>
+                <div class="label">Machu Picchu</div>
+              </div>
+              <div class="ph">
+                <img src="images/andes.jpg" alt="Andes mountains (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">⛰️</div>
+                <div class="label">The Andes</div>
+              </div>
+              <div class="ph">
+                <img src="images/amazon.jpg" alt="Amazon rainforest (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">🌿</div>
+                <div class="label">Amazonia</div>
+              </div>
+              <div class="ph">
+                <img src="images/lima.jpg" alt="Lima (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">🏙️</div>
+                <div class="label">Lima</div>
+              </div>
+              <div class="ph">
+                <img src="images/nazca.jpg" alt="Nazca lines (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">🌀</div>
+                <div class="label">Nazca Lines</div>
+              </div>
+              <div class="ph">
+                <img src="images/ceviche.jpg" alt="Ceviche (placeholder)" onerror="this.remove(); this.parentElement.querySelector('.emoji').style.display='block';" />
+                <div class="emoji" aria-hidden="true" style="display:none">🍋</div>
+                <div class="label">Ceviche</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini">
+            <h3>Your notes</h3>
+            <p class="tiny">Local-only scratchpad.</p>
+            <textarea id="notes" style="width:100%; min-height:140px; padding:10px; border-radius:14px; border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.18); color:rgba(255,255,255,.92);"></textarea>
+            <div class="row" style="margin-top:10px;">
+              <button class="btn ghost" id="btnClearNotes">Clear</button>
+              <span class="tiny" id="notesStatus">Saved.</span>
+            </div>
+          </div>
+
+          <div class="mini">
+            <h3>How to use it</h3>
+            <p>Open lessons, read, then tap <strong>Mark lesson done</strong>. When all lessons are done, you get a “stamp” for that chapter.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const SOURCES = [
+      { label:"UNESCO: Machu Picchu", href:"https://whc.unesco.org/en/list/274/" },
+      { label:"UNESCO: Nasca & Palpa Lines", href:"https://whc.unesco.org/en/list/700/" },
+      { label:"Britannica: Achievement of independence", href:"https://www.britannica.com/place/Peru/Achievement-of-independence" },
+      { label:"Geography: Costa/Sierra/Selva", href:"https://en.wikipedia.org/wiki/Geography_of_Peru" }
+    ];
+
+    const CHAPTERS = [
+      {
+        id:"map",
+        name:"The Map That Explains Everything",
+        emoji:"🗺️",
+        dot:"rgba(123,214,164,.9)",
+        hook:"Peru makes more sense when you stop thinking “north–south” and start thinking “west–east.”",
+        intro:"Peru is commonly described as three broad regions: Coast (Costa), Andes (Sierra), and the Amazon basin / jungle (Selva). That’s simplified, but it’s still the best first mental model because it predicts climate, food systems, languages, and travel constraints.",
+        prompt:"If you only knew whether a town was on the coast, in the highlands, or in the jungle—what would you guess about its climate, staple foods, and daily challenges?",
+        terms:[
+          { t:"Costa", d:"Coastal plain along the Pacific. Often arid/desert-like, with cities and farming in river valleys." },
+          { t:"Sierra", d:"The Andes highlands. Big altitude shifts, cold nights, terrace farming, and mountain travel constraints." },
+          { t:"Selva", d:"Amazon basin / rainforest side of Peru, largely east of the Andes: heat, humidity, river networks, biodiversity." },
+          { t:"Altitude", d:"Height above sea level. In Peru, it’s a major factor in how you feel physically and what grows where." }
+        ],
+        lessons:[
+          {
+            title:"Why the coast can be desert-y",
+            sub:"Ocean + mountains = counterintuitive dryness",
+            body:[
+              "Peru sits on the Pacific, but large parts of the coast are surprisingly dry. Cold water offshore cools the air and changes how moisture behaves, while the Andes block many weather systems from the east. The result: cities and farms cluster where water is predictable—especially in river valleys.",
+              "This is a big travel clue: the coast’s green often comes from irrigation and valleys, not frequent rain."
+            ],
+            bullets:[
+              "Coast = arid plains + river valleys where life concentrates.",
+              "Climate can be cool/gray in some seasons despite being coastal.",
+              "Water infrastructure matters more than tourists expect."
+            ]
+          },
+          {
+            title:"The Andes as a wall — and a ladder",
+            sub:"Mountains change access, culture, and time",
+            body:[
+              "The Andes are Peru’s backbone. They’re a barrier (hard travel, isolated valleys), but also a ladder: elevation bands support different crops and ways of living. People historically moved goods up and down slopes to access multiple ecological zones—a kind of “vertical economy.”"
+            ],
+            bullets:[
+              "Distance on a map ≠ travel time in mountains.",
+              "Elevation strongly shapes farming patterns.",
+              "Altitude changes daily life and human performance."
+            ]
+          },
+          {
+            title:"Selva isn’t one thing",
+            sub:"Rainforest + foothills + rivers",
+            body:[
+              "Peru’s Amazon side includes lowland rainforest and transition zones where the Andes drop into lush foothills (often described as cloud forest). Rivers are highways in many areas, and river levels can shape travel and logistics.",
+              "Key shift vs. the highlands: heat/humidity and river systems are the constraints—not thin air."
+            ],
+            bullets:[
+              "Think in river networks, not highways.",
+              "Expect wetter vs drier periods (varies by region/year).",
+              "Topography drives biodiversity—especially at ‘edges’."
+            ]
+          }
+        ]
+      },
+
+      {
+        id:"lima",
+        name:"Lima + The Coast: A Capital on a Desert Edge",
+        emoji:"🌊",
+        dot:"rgba(255,184,107,.9)",
+        hook:"Lima is a coastal capital where the ocean meets a desert—so water, trade, and food become identity.",
+        intro:"Lima anchors modern Peru politically and economically. Understanding Lima means understanding the coast: cities on dry land, fed by valleys, connected to the Pacific, and historically plugged into global trade.",
+        prompt:"How does living in a huge city near a desert change what feels ‘urgent’ (water, food supply, growth, public space)?",
+        terms:[
+          { t:"Pacific", d:"Ocean along Peru’s west. Coastal life ties to fishing, shipping, and marine ecosystems." },
+          { t:"River valley", d:"Narrow green corridor cutting through coastal dryness—key for farming and settlement." },
+          { t:"Geoglyph", d:"A large ground drawing made by arranging or removing surface materials." }
+        ],
+        lessons:[
+          {
+            title:"Coastal settlement logic",
+            sub:"Cities cluster where water is predictable",
+            body:[
+              "In arid coastal regions, settlement is rarely random: people cluster around water access (rivers, aquifers, irrigated areas) and around ports. That’s why you can see dense urban life next to seemingly empty desert landscapes.",
+              "It’s also why water policy and infrastructure are often politically and emotionally high-stakes on the coast."
+            ],
+            bullets:[
+              "Look for green ribbons of agriculture through tan landscapes.",
+              "Urban growth + limited water = long-term planning pressure.",
+              "Ports link coast economies to global trade."
+            ]
+          },
+          {
+            title:"Nazca Lines: desert art at massive scale",
+            sub:"A pre-Inca civilization in the coastal desert",
+            body:[
+              "UNESCO describes the Lines and Geoglyphs of Nasca and Palpa as covering a huge area of Peru’s arid coastal plain (about 400 km south of Lima). They were made by scratching or clearing the surface to reveal lighter ground beneath.",
+              "UNESCO dates them roughly between 500 BCE and 500 CE and notes they depict animals, stylized plants, imaginary beings, and geometric figures several kilometers long."
+            ],
+            bullets:[
+              "Dry desert helps preservation, but the site is still fragile.",
+              "The lines are a long-term cultural practice, not one ‘drawing.’",
+              "The key lesson: Peru has deep layers beyond the Inca."
+            ]
+          },
+          {
+            title:"Why food in Peru is a geography lesson",
+            sub:"Sea + mountains + jungle on one menu",
+            body:[
+              "Peruvian cuisine is what happens when one country has a rich sea, dramatic altitude zones, and an Amazon pantry. Even a simple meal can be a map: seafood from the coast, potatoes from the highlands, fruits/herbs from Amazonia.",
+              "Instead of memorizing dish names, learn the ingredient logic: what grows where and why."
+            ],
+            bullets:[
+              "Coast: seafood culture (ceviche is the obvious example).",
+              "Highlands: potatoes and preservation traditions.",
+              "Jungle: fruits, herbs, and river-linked food systems."
+            ]
+          }
+        ]
+      },
+
+      {
+        id:"andes",
+        name:"The Andes: Altitude, Farming, and Inca Engineering",
+        emoji:"⛰️",
+        dot:"rgba(123,214,164,.85)",
+        hook:"The Andes aren’t just scenery—they force humans to invent new ways of living.",
+        intro:"The highlands shape what your body can do, how food is grown, how towns connect, and how empires build infrastructure. The Inca are famous here because they engineered for mountains rather than fighting them.",
+        prompt:"If you had to govern across steep terrain, what would you prioritize: roads, food storage, or communication—and why?",
+        terms:[
+          { t:"Terraces", d:"Stepped platforms that create farmland and manage water/erosion on slopes." },
+          { t:"Chuño", d:"Andean method of freeze-drying potatoes using cold nights and sunny days; long-term storage food tech." },
+          { t:"Machu Picchu", d:"A 15th-century Inca site + surrounding sanctuary; UNESCO recognizes it as a mixed (cultural + natural) World Heritage property." },
+          { t:"Titicaca", d:"World’s highest lake navigable to large vessels; major cultural region around Peru–Bolivia border." }
+        ],
+        lessons:[
+          {
+            title:"Altitude is physics (and it changes you)",
+            sub:"Why people acclimate",
+            body:[
+              "At higher altitude, air pressure drops so each breath delivers less oxygen. That can mean headaches, sleep disruption, and feeling winded faster. Acclimatization is your body adapting over time, so pacing matters.",
+              "Practical approach: take day one easy at altitude, hydrate, and keep activity gentle."
+            ],
+            bullets:[
+              "Stairs hit harder. So does alcohol.",
+              "Slow rhythms help your body catch up.",
+              "It’s not weakness; it’s physiology."
+            ]
+          },
+          {
+            title:"Potatoes as civilization technology",
+            sub:"Diversity + preservation = resilience",
+            body:[
+              "Potatoes were domesticated in the region of southern Peru and northwestern Bolivia thousands of years ago. In highland climates with big temperature swings, potato diversity acts like risk management: different varieties thrive under different conditions.",
+              "Andean preservation tech includes chuño—turning harvests into long-lasting food stores."
+            ],
+            bullets:[
+              "Food storage helps societies survive shocks.",
+              "Crop diversity reduces climate risk.",
+              "Preservation is a form of engineering."
+            ]
+          },
+          {
+            title:"Machu Picchu: a protected landscape, not just ruins",
+            sub:"Culture + nature together",
+            body:[
+              "UNESCO describes the Historic Sanctuary of Machu Picchu as a mixed World Heritage site: a famous 15th-century Inca monument plus a large surrounding mountain ecosystem. It sits at over ~2,400 meters above sea level in steep terrain.",
+              "The lesson: Inca achievements are architectural AND environmental—water, stone, slope, and microclimate are part of the design."
+            ],
+            bullets:[
+              "Think ‘whole sanctuary’ not ‘single site.’",
+              "Engineering is shaped by mountain ecology.",
+              "Tourism pressure makes conservation real."
+            ]
+          }
+        ]
+      },
+
+      {
+        id:"amazon",
+        name:"Amazonia: Rivers, Biodiversity, and Different Time",
+        emoji:"🌿",
+        dot:"rgba(255,184,107,.75)",
+        hook:"In the jungle, the map is a river system—and schedules obey water levels.",
+        intro:"Peru’s Amazon side is vast. The basics that actually teach you something: rivers as infrastructure, transition zones (cloud forests), and how climate shapes settlement and daily life.",
+        prompt:"If roads were unreliable and water routes changed seasonally, how would you plan trade, travel, and services?",
+        terms:[
+          { t:"Amazon Basin", d:"The drainage area feeding the Amazon river system—major rainforest ecosystems." },
+          { t:"Biodiversity", d:"Variety of life; Amazon regions often have extremely high biodiversity." },
+          { t:"Wet/dry cycle", d:"Many areas cycle between wetter and drier periods rather than four seasons—affects rivers and access." }
+        ],
+        lessons:[
+          {
+            title:"Rivers are the highways",
+            sub:"Infrastructure without asphalt",
+            body:[
+              "In many Amazonian areas, rivers connect towns, enable trade, and shape where people live. When river levels change, routes and travel times change too. That’s a totally different spatial logic from mountain passes or highways.",
+              "If you want to ‘get’ Amazonia fast: start thinking in river networks."
+            ],
+            bullets:[
+              "Nearest river can be the real ‘main road.’",
+              "Seasonal shifts affect logistics and access.",
+              "Wildlife and communities often cluster near water."
+            ]
+          },
+          {
+            title:"The Andes–Amazon edge is special",
+            sub:"Cloud forests and microclimates",
+            body:[
+              "Where the Andes descend into the Amazon basin, you can get lush transitional environments often described as cloud forest. These zones can be ecologically rich and visually dramatic, with microclimates that change over short distances.",
+              "They’re a great example of how Peru’s geography creates biodiversity."
+            ],
+            bullets:[
+              "Short distance, big weather change.",
+              "Often excellent for bird life.",
+              "Topography drives ecosystems."
+            ]
+          },
+          {
+            title:"Different constraints than the Andes",
+            sub:"Heat, humidity, insects",
+            body:[
+              "In the jungle, the hard part is usually heat management, hydration, and insects—not altitude. Slow pacing is a skill, not a failure: heat can make everything harder.",
+              "The underlying lesson: each region has a different set of ‘rules.’"
+            ],
+            bullets:[
+              "Breathable layers win.",
+              "Shade and water matter.",
+              "Respect the ecosystem—leave no trace."
+            ]
+          }
+        ]
+      },
+
+      {
+        id:"history",
+        name:"History Layer Cake: Nazca → Inca → Independence",
+        emoji:"🏺",
+        dot:"rgba(123,214,164,.65)",
+        hook:"Peru’s history isn’t a straight line—it’s stacked civilizations plus a complicated break from empire.",
+        intro:"Don’t compress everything into ‘Inca + Spanish.’ Peru has deep pre-Inca histories (Nazca is one), then the Inca period, then colonial rule, and a longer struggle for independence than the one-date version implies.",
+        prompt:"How does having multiple ‘foundational histories’ change what modern identity feels like?",
+        terms:[
+          { t:"500 BCE–500 CE", d:"UNESCO’s date range for the Nasca/Palpa geoglyphs—centuries of continuity." },
+          { t:"July 28, 1821", d:"Independence was declared in Lima; the broader struggle continued until Spanish power was broken in 1824." },
+          { t:"Ayacucho (1824)", d:"A decisive 1824 battle that helped ensure independence (Britannica emphasizes 1824 as the breaking point)." }
+        ],
+        lessons:[
+          {
+            title:"Nazca Lines: depth, not just mystery",
+            sub:"A reminder that Peru predates the Inca by a lot",
+            body:[
+              "UNESCO dates the Nasca/Palpa geoglyphs to roughly 500 BCE–500 CE. They include animals, plants, imaginary beings, and massive geometric lines. The scale suggests a coordinated cultural practice over long time spans.",
+              "Teaching takeaway: Peru’s cultural timeline is long, layered, and region-specific."
+            ],
+            bullets:[
+              "Peru has many civilizations, not one origin story.",
+              "Landscape art can be a social practice over centuries.",
+              "Conservation is part of the story now."
+            ]
+          },
+          {
+            title:"Independence: the date vs the process",
+            sub:"Why 1821 is celebrated, but 1824 matters",
+            body:[
+              "Britannica notes that independence was declared on July 28, 1821, but Spanish power in the interior remained strong. The liberation struggle continued until major battles in 1824 helped break Spanish power and ensure independence.",
+              "So: 1821 is the symbolic declaration; 1824 is the decisive military endpoint."
+            ],
+            bullets:[
+              "Symbols matter in nation-building.",
+              "Real control can lag behind declarations.",
+              "History is usually a process, not a moment."
+            ]
+          },
+          {
+            title:"A practical travel method: read places in layers",
+            sub:"Don’t flatten everything into ‘ancient’",
+            body:[
+              "Try this: in any place you visit, ask what the oldest layer is, what the next layer is, what changed after colonization, and what’s distinctly modern. This prevents the common travel mistake of turning everything into one vague ‘past.’",
+              "It also makes museums and ruins more intelligible fast."
+            ],
+            bullets:[
+              "Layer 1: pre-Inca cultures (varies by region).",
+              "Layer 2: Inca-era highland power + infrastructure.",
+              "Layer 3: colonial/republican eras shaping cities and land."
+            ]
+          }
+        ]
+      },
+
+      {
+        id:"culture",
+        name:"People, Language, and Culture in Motion",
+        emoji:"🗣️",
+        dot:"rgba(255,184,107,.65)",
+        hook:"Peru isn’t one culture—it’s cultures in conversation, sometimes in tension, often in fusion.",
+        intro:"A better question than “what are Peruvians like?” is “what changes by region, language, and history?” Peru’s cultural life is shaped by geography, migration, and local traditions. Languages are part of that map.",
+        prompt:"If you switch regions, what would you expect to change first—speech, food, architecture, or pace of daily life?",
+        terms:[
+          { t:"Spanish", d:"Dominant national language used widely across regions." },
+          { t:"Quechua", d:"Indigenous language family associated with the Andes; also present in place names and daily life." },
+          { t:"Aymara", d:"Indigenous language especially associated with the southern highlands near Lake Titicaca." },
+          { t:"Market culture", d:"Markets as social and economic hubs: daily food supply, textiles, herbs, snacks, and more." }
+        ],
+        lessons:[
+          {
+            title:"Language maps to place",
+            sub:"Official status where languages predominate",
+            body:[
+              "Peru’s linguistic reality is regional: Spanish is official nationally, and Quechua, Aymara, and other indigenous languages have official status where they predominate. In practice, language is tied to region, identity, and history.",
+              "Learning a few basics and listening well is the high-value move."
+            ],
+            bullets:[
+              "Place names preserve older languages.",
+              "Bilingualism can be a daily reality.",
+              "Respect is simple: ask, listen, don’t perform."
+            ]
+          },
+          {
+            title:"Food as cultural memory",
+            sub:"Ingredients tell you where you are",
+            body:[
+              "Rather than memorizing dishes, learn ingredient logic: coast → seafood; highlands → potatoes and preservation; jungle → fruits/herbs and river-linked food systems. That approach teaches you faster and makes menus make sense.",
+              "It also reveals why Peru’s food is globally celebrated: it’s biodiversity + history on a plate."
+            ],
+            bullets:[
+              "Ceviche makes sense because the Pacific is central to the coast.",
+              "Potatoes and chuño make sense because altitude demands resilience.",
+              "Amazon ingredients track ecology and river trade."
+            ]
+          },
+          {
+            title:"How to learn ‘deep’ while traveling",
+            sub:"One anchor topic per day",
+            body:[
+              "Pick one thing per day to investigate: a market ingredient, a textile pattern, a local festival, a museum object. Ask: where did it come from, what problem does it solve, and what meaning does it carry?",
+              "That turns travel into a daily learning loop—without needing a lecture."
+            ],
+            bullets:[
+              "Anchor topic → origin → function → meaning.",
+              "Notice what changes with altitude/climate.",
+              "Let locals’ priorities guide what you study."
+            ]
+          }
+        ]
+      }
+    ];
+
+    const LS_KEY = "peruDeepDive_v1";
+    const state = { chapterId: CHAPTERS[0].id, doneLessons: {}, completedChapters: {}, notes: "" };
+
+    const $ = sel => document.querySelector(sel);
+    const tabsEl = document.querySelector(".tabs");
+    const accEl = $("#lessonAccordion");
+
+    function keyLesson(chId, idx){ return `${chId}::${idx}`; }
+    function chapterById(id){ return CHAPTERS.find(c => c.id === id) || CHAPTERS[0]; }
+
+    function load(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(LS_KEY));
+        if(saved && typeof saved === "object") Object.assign(state, saved);
+      }catch(e){}
+      $("#notes").value = state.notes || "";
+      $("#chapterTotal").textContent = String(CHAPTERS.length);
+    }
+    function save(){
+      state.notes = $("#notes").value || "";
+      localStorage.setItem(LS_KEY, JSON.stringify(state));
+      $("#notesStatus").textContent = "Saved.";
+    }
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function renderTabs(){
+      tabsEl.innerHTML = "";
+      CHAPTERS.forEach(ch => {
+        const btn = document.createElement("button");
+        btn.className = "tabBtn";
+        btn.type = "button";
+        btn.role = "tab";
+        btn.setAttribute("aria-selected", ch.id === state.chapterId ? "true" : "false");
+        const done = !!state.completedChapters[ch.id];
+        btn.textContent = `${ch.emoji} ${ch.name}${done ? " ✓" : ""}`;
+        btn.addEventListener("click", () => {
+          state.chapterId = ch.id;
+          save();
+          renderTabs();
+          renderChapter();
+        });
+        tabsEl.appendChild(btn);
+      });
+    }
+
+    function renderTerms(ch){
+      const bar = $("#termBar");
+      const def = $("#termDef");
+      bar.innerHTML = "";
+      def.classList.remove("show");
+      def.textContent = "";
+
+      ch.terms.forEach(termObj => {
+        const b = document.createElement("button");
+        b.className = "term";
+        b.type = "button";
+        b.textContent = termObj.t;
+        b.setAttribute("aria-expanded","false");
+        b.addEventListener("click", () => {
+          const expanded = b.getAttribute("aria-expanded") === "true";
+          [...bar.querySelectorAll(".term")].forEach(t => t.setAttribute("aria-expanded","false"));
+          if(expanded){
+            def.classList.remove("show");
+            def.textContent = "";
+          }else{
+            b.setAttribute("aria-expanded","true");
+            def.innerHTML = `<strong>${escapeHtml(termObj.t)}:</strong> ${escapeHtml(termObj.d)}`;
+            def.classList.add("show");
+          }
+        });
+        bar.appendChild(b);
+      });
+    }
+
+    function renderLessons(ch){
+      accEl.innerHTML = "";
+      ch.lessons.forEach((lsn, idx) => {
+        const det = document.createElement("details");
+        det.dataset.lessonIndex = String(idx);
+
+        const summary = document.createElement("summary");
+        summary.innerHTML = `
+          <div class="sumLeft">
+            <div class="num">${idx+1}</div>
+            <div class="sumTitle">
+              <strong>${escapeHtml(lsn.title)}</strong>
+              <span>${escapeHtml(lsn.sub)}</span>
+            </div>
+          </div>
+          <div class="chev">▾</div>
+        `;
+
+        const body = document.createElement("div");
+        body.className = "lesson";
+
+        const doneKey = keyLesson(ch.id, idx);
+        const isDone = !!state.doneLessons[doneKey];
+
+        const paragraphs = lsn.body.map(p => `<p style="margin:0;">${escapeHtml(p)}</p>`).join("");
+        const bullets = lsn.bullets?.length
+          ? `<ul class="list">${lsn.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join("")}</ul>`
+          : "";
+
+        body.innerHTML = `
+          ${paragraphs}
+          ${bullets}
+          <div class="row">
+            <button class="btn ${isDone ? "ghost" : "primary"}" data-action="done">
+              ${isDone ? "✓ Lesson done (tap to undo)" : "Mark lesson done"}
+            </button>
+            <span class="tiny">${isDone ? "Counted toward chapter completion." : "Finish all lessons to earn a stamp."}</span>
+          </div>
+        `;
+
+        det.appendChild(summary);
+        det.appendChild(body);
+        accEl.appendChild(det);
+
+        body.querySelector('[data-action="done"]').addEventListener("click", (e) => {
+          e.preventDefault();
+          const k = keyLesson(ch.id, idx);
+          state.doneLessons[k] = !state.doneLessons[k];
+          save();
+          renderChapterStats();
+          renderTabs();
+          renderLessons(ch);
+          [...accEl.querySelectorAll("details")].forEach(d => { if(d.dataset.lessonIndex === String(idx)) d.open = true; });
+        });
+      });
+    }
+
+    function renderSources(){
+      const el = $("#sourceLinks");
+      el.innerHTML = SOURCES.map(s => `<a href="${s.href}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.label)}</a>`).join(" • ");
+    }
+
+    function renderChapterStats(){
+      const ch = chapterById(state.chapterId);
+      const total = ch.lessons.length;
+      let done = 0;
+      for(let i=0;i<total;i++) if(state.doneLessons[keyLesson(ch.id, i)]) done++;
+
+      $("#doneCount").textContent = String(done);
+      $("#lessonCount").textContent = String(total);
+
+      const pct = total ? Math.round((done/total)*100) : 0;
+      $("#barFill").style.width = pct + "%";
+      $("#progressLabel").textContent = pct + "% of this chapter";
+
+      if(done === total && !state.completedChapters[ch.id]){
+        state.completedChapters[ch.id] = true;
+        save();
+        renderTabs();
+      }
+
+      const chaptersDone = Object.keys(state.completedChapters).filter(k => state.completedChapters[k]).length;
+      $("#chapterCount").textContent = String(chaptersDone);
+    }
+
+    function renderChapter(){
+      const ch = chapterById(state.chapterId);
+      $("#chapterName").textContent = ch.name;
+      $("#chapterHook").textContent = ch.hook;
+      $("#chapterIntro").textContent = ch.intro;
+      $("#chapterPrompt").textContent = ch.prompt;
+      $("#chapterLabel").textContent = `${ch.emoji} ${ch.name}`;
+
+      const dot = $("#chapterDot");
+      dot.style.background = ch.dot || "rgba(123,214,164,.9)";
+      dot.style.boxShadow = ch.dot.includes("255,184,107") ? "0 0 0 6px rgba(255,184,107,.12)" : "0 0 0 6px rgba(123,214,164,.12)";
+
+      $("#btnMarkChapter").textContent = state.completedChapters[ch.id] ? "✓ Chapter complete (undo)" : "Mark chapter complete";
+
+      renderTerms(ch);
+      renderLessons(ch);
+      renderChapterStats();
+      renderSources();
+    }
+
+    $("#btnOpenAll").addEventListener("click", () => { [...accEl.querySelectorAll("details")].forEach(d => d.open = true); });
+    $("#btnCloseAll").addEventListener("click", () => { [...accEl.querySelectorAll("details")].forEach(d => d.open = false); });
+
+    $("#btnReset").addEventListener("click", () => {
+      if(!confirm("Reset all progress + notes on this device?")) return;
+      localStorage.removeItem(LS_KEY);
+      location.reload();
+    });
+
+    $("#btnMarkChapter").addEventListener("click", () => {
+      const ch = chapterById(state.chapterId);
+      state.completedChapters[ch.id] = !state.completedChapters[ch.id];
+      save();
+      renderTabs();
+      renderChapterStats();
+      $("#btnMarkChapter").textContent = state.completedChapters[ch.id] ? "✓ Chapter complete (undo)" : "Mark chapter complete";
+    });
+
+    $("#notes").addEventListener("input", () => {
+      $("#notesStatus").textContent = "Saving…";
+      clearTimeout(window._notesTm);
+      window._notesTm = setTimeout(save, 250);
+    });
+
+    $("#btnClearNotes").addEventListener("click", () => {
+      if(!confirm("Clear notes?")) return;
+      $("#notes").value = "";
+      save();
+    });
+
+    load();
+    renderTabs();
+    renderChapter();
+  </script>
+</body>
+</html>
